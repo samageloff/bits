@@ -149,7 +149,8 @@ Core.prototype.buildString = function(var_args) {
 Core.prototype.isFunction = function(val) {
   var getType = {};
   return val && getType.toString.call(val) === '[object Function]';
-};;Sams.accordion = function (elem) {
+};
+Sams.accordion = function (elem) {
 
   "use strict";
 
@@ -205,7 +206,8 @@ Sams.accordion.prototype.tearDown = function (panel) {
     }
   });
 
-};;Sams.slideshow = function (elem) {
+};
+Sams.slideshow = function (elem) {
 
   "use strict";
 
@@ -328,5 +330,6 @@ Sams.slideshow.prototype.updateCurrentClass = function (currentIndex) {
 
 Sams.slideshow.prototype.generateId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
-};;// Initialize the core
+};
+// Initialize the core
 var start = new Core();

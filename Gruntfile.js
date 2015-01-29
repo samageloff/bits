@@ -1,31 +1,18 @@
 module.exports = function(grunt) {
 
-  // Load grunt tasks automatically
-  require('load-grunt-tasks')(grunt);
-
-  // Time how long tasks take. Can help when optimizing build times
-  require('time-grunt')(grunt);
-
   // Project configuration.
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
 
     clean: {
-      build: ['build'],
-      dev: {
-        src: ['build/app.js', 'build/main.css', 'build/<%= pkg.name %>.js']
-      },
-      prod: ['dist']
+      build: ['www-root/js/dist/build.js']
     },
 
     concat: {
-      options: {
-        separator: ';',
-      },
       dist: {
-        src: ['js/src/core.js', 'js/src/mods/**/*.js', 'js/src/init.js'],
-        dest: 'js/dist/build.js',
+        src: ['www-root/js/src/core.js', 'www-root/js/src/mods/**/*.js', 'www-root/js/src/init.js'],
+        dest: 'www-root/js/dist/build.js',
       },
     },
 
@@ -39,29 +26,31 @@ module.exports = function(grunt) {
       }
     },
 
-    watch: {
-      all: {
-        options: {
-          livereload: true
-        },
-      },
-      scripts: {
-        files: ['**/*.js'],
-        tasks: ['jshint:all', 'clean', 'concat', 'copy']
-      }
+    jshint: {
+      files: ['Gruntfile.js', 'www-root/js/**/*.js']
     },
 
-    jshint: {
-      all: ['Gruntfile.js', 'js/**/*.js']
+    watch: {
+      scripts: {
+        files: ['<%= jshint.files %>'],
+        tasks: ['jshint', 'concat']
+      }
     }
 
   });
 
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+
   // Default task(s).
   grunt.registerTask('default', [
+    'jshint',
     'connect',
     'watch',
-    'jshint',
+    'clean',
     'concat'
   ]);
 };
