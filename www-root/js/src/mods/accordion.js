@@ -2,7 +2,7 @@ Sams.accordion = function (elem) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = document.getElementById(elem);
 
   this.config = {
     'panel': '.panel',
