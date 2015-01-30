@@ -41,6 +41,7 @@ Core.prototype.locateModules = function(rootElem) {
 
 
 /**
+ *
  * Identify all modules associated with the supplied element and instantiates
  * each. If there is an available config object that is passed to the module
  * constructor otherwise an empty object is supplied.
@@ -154,7 +155,7 @@ Sams.accordion = function (elem) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',
@@ -207,11 +208,20 @@ Sams.accordion.prototype.tearDown = function (panel) {
   });
 
 };
+ // TODOS:
+ // disable prev/next when at front/back of slideshow
+ //       find "correct" solution instead of using _self
+ //       fluid width
+ //       option: set starting value
+ //       option: circular
+ //       option: indicies
+ //       option: left/right arrow
+
 Sams.slideshow = function (elem) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',

@@ -1,8 +1,17 @@
+ // TODOS:
+ // disable prev/next when at front/back of slideshow
+ //       find "correct" solution instead of using _self
+ //       fluid width
+ //       option: set starting value
+ //       option: circular
+ //       option: indicies
+ //       option: left/right arrow
+
 Sams.slideshow = function (elem) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',

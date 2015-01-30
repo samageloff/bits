@@ -41,6 +41,7 @@ Core.prototype.locateModules = function(rootElem) {
 
 
 /**
+ *
  * Identify all modules associated with the supplied element and instantiates
  * each. If there is an available config object that is passed to the module
  * constructor otherwise an empty object is supplied.

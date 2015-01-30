@@ -9,6 +9,15 @@ module.exports = function(grunt) {
       build: ['www-root/js/dist/build.js']
     },
 
+    concurrent: {
+      target: {
+        tasks: ['connect', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
     concat: {
       dist: {
         src: ['www-root/js/src/core.js', 'www-root/js/src/mods/**/*.js', 'www-root/js/src/init.js'],
@@ -31,9 +40,12 @@ module.exports = function(grunt) {
     },
 
     watch: {
+      options: {
+        atBegin: true
+      },
       scripts: {
-        files: ['<%= jshint.files %>'],
-        tasks: ['jshint', 'concat']
+        files: ['Gruntfile.js', 'www-root/js/src/**/*.js'],
+        tasks: ['concat', 'jshint']
       }
     }
 
@@ -44,13 +56,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   // Default task(s).
-  grunt.registerTask('default', [
-    'jshint',
-    'connect',
-    'watch',
-    'clean',
-    'concat'
-  ]);
+  grunt.registerTask('default', ['concurrent:target']);
 };
