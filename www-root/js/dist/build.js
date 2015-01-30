@@ -151,7 +151,7 @@ Core.prototype.isFunction = function(val) {
   var getType = {};
   return val && getType.toString.call(val) === '[object Function]';
 };
-Sams.accordion = function (elem) {
+Sams.accordion = function (elem, config) {
 
   "use strict";
 
@@ -217,7 +217,7 @@ Sams.accordion.prototype.tearDown = function (panel) {
  //       option: indicies
  //       option: left/right arrow
 
-Sams.slideshow = function (elem) {
+Sams.slideshow = function (elem, config) {
 
   "use strict";
 

@@ -7,7 +7,7 @@
  //       option: indicies
  //       option: left/right arrow
 
-Sams.slideshow = function (elem) {
+Sams.slideshow = function (elem, config) {
 
   "use strict";
 

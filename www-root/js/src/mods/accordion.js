@@ -1,4 +1,4 @@
-Sams.accordion = function (elem) {
+Sams.accordion = function (elem, config) {
 
   "use strict";
 
