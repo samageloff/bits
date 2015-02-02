@@ -8,7 +8,7 @@
  //       vertical vs horizontal
  //       animation options
 
-Sams.slideshow = function (elem, config) {
+sams.slideshow = function (elem, config) {
 
   "use strict";
 
@@ -26,20 +26,20 @@ Sams.slideshow = function (elem, config) {
   this.list = this.wrapper.children[0];
 
   // Set up transition end
-  this.transitionEnd = Sams.Util.transitionEndEventName();
+  this.transitionEnd = sams.util.transitionEndEventName();
 
   this.collection = [];
 
   this.init();
 };
 
-Sams.slideshow.prototype.init = function () {
+sams.slideshow.prototype.init = function () {
   this.list.style.width = this.calculateDimensions();
   this.generateControls();
   this.bindEvents();
 };
 
-Sams.slideshow.prototype.calculateDimensions = function () {
+sams.slideshow.prototype.calculateDimensions = function () {
   var slideshow_width = 0;
 
   this.panels.forEach(function (currentValue, index, array) {
@@ -61,7 +61,7 @@ Sams.slideshow.prototype.calculateDimensions = function () {
   return slideshow_width + 'px';
 };
 
-Sams.slideshow.prototype.generateControls = function () {
+sams.slideshow.prototype.generateControls = function () {
   function createButton(id, klass) {
     var button = document.createElement('button');
     button.setAttribute('id', id);
@@ -77,7 +77,7 @@ Sams.slideshow.prototype.generateControls = function () {
   this.wrapper.parentElement.appendChild(this.nextBtn);
 };
 
-Sams.slideshow.prototype.bindEvents = function () {
+sams.slideshow.prototype.bindEvents = function () {
   this.prevBtn.addEventListener('click', function () {
     this.getPreviousItem();
   }.bind(this));
@@ -87,7 +87,7 @@ Sams.slideshow.prototype.bindEvents = function () {
   }.bind(this));
 };
 
-Sams.slideshow.prototype.getCurrentIndex = function () {
+sams.slideshow.prototype.getCurrentIndex = function () {
   var obj = {};
 
   this.panels.forEach(function (currentValue, index) {
@@ -100,7 +100,7 @@ Sams.slideshow.prototype.getCurrentIndex = function () {
   return obj;
 };
 
-Sams.slideshow.prototype.getPreviousItem = function () {
+sams.slideshow.prototype.getPreviousItem = function () {
   var currentIndex = this.getCurrentIndex().previous;
 
   if (currentIndex !== -1) {
@@ -113,7 +113,7 @@ Sams.slideshow.prototype.getPreviousItem = function () {
   }
 };
 
-Sams.slideshow.prototype.getNextItem = function () {
+sams.slideshow.prototype.getNextItem = function () {
   var currentIndex = this.getCurrentIndex().next;
 
   if (currentIndex <= this.collection.length - 1) {
@@ -126,12 +126,12 @@ Sams.slideshow.prototype.getNextItem = function () {
   }
 };
 
-Sams.slideshow.prototype.updateCurrentClass = function (currentIndex) {
+sams.slideshow.prototype.updateCurrentClass = function (currentIndex) {
   var currentSlide = this.elem.querySelector(this.config.current);
   currentSlide.classList.remove('current');
   this.panels[currentIndex].classList.add('current');
 };
 
-Sams.slideshow.prototype.generateId = function () {
+sams.slideshow.prototype.generateId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
 };

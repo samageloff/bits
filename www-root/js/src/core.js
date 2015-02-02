@@ -1,10 +1,10 @@
-var Sams = {};
+var sams = {};
 
 /**
  * Name of data attribute containing module list
  * @enum {string}
  */
-Sams.ModKey = {
+sams.modConf = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
@@ -16,13 +16,13 @@ Sams.ModKey = {
  * Application core for locating and instantiating page modules
  * @constructor
  */
-Sams.Core = function() {
+sams.core = function() {
   this.executeModules();
 };
 
 
-Sams.Core.prototype.knownMods = function(mod) {
-  return Sams[mod];
+sams.core.prototype.knownMods = function(mod) {
+  return sams[mod];
 };
 
 
@@ -32,8 +32,8 @@ Sams.Core.prototype.knownMods = function(mod) {
  * @return {Array} Array of elements containing modules.
  * @private
  */
-Sams.Core.prototype.locateModules = function(rootElem) {
-  var query = document.querySelectorAll('[' + Sams.ModKey.ATTRIBUTE + ']', rootElem),
+sams.core.prototype.locateModules = function(rootElem) {
+  var query = document.querySelectorAll('[' + sams.modConf.ATTRIBUTE + ']', rootElem),
     modules = Array.prototype.slice.call(query);
   return modules;
 };
@@ -49,22 +49,22 @@ Sams.Core.prototype.locateModules = function(rootElem) {
  * @param {Array} arr Original array to iterate over.
  * @private
  */
-Sams.Core.prototype.instantiateModules = function(elem, index, arr) {
-  var data = this.getDataSet(elem, Sams.ModKey.DATA);
+sams.core.prototype.instantiateModules = function(elem, index, arr) {
+  var data = this.getDataSet(elem, sams.modConf.DATA);
   var mods = data.split(' ');
   var numberOfMods = mods.length;
   var modConfig = {};
   var modName, modPath, configAttrName;
 
   if (!elem.id) {
-    elem.id = this.buildString(this.toSelectorCase(Sams.ModKey.DATA), '-', index);
+    elem.id = this.buildString(this.toSelectorCase(sams.modConf.DATA), '-', index);
   }
 
   for (var i = 0; i < numberOfMods; i += 1) {
     modName = mods[i];
     modPath = this.knownMods(modName);
     configAttrName = this.toCamelCase(this.buildString(
-        Sams.ModKey.CONFIG_PREFIX, '-', modName.toLowerCase()));
+        sams.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
 
     if (this.isFunction(modPath)) {
       new modPath(elem, modConfig);
@@ -73,11 +73,11 @@ Sams.Core.prototype.instantiateModules = function(elem, index, arr) {
 };
 
 
-Sams.Core.prototype.getDataSet = function(elem, key) {
+sams.core.prototype.getDataSet = function(elem, key) {
   if (elem.dataset) {
     return elem.dataset[key];
   } else {
-    return elem.getAttribute(Sams.ModKey.PREFIX_ + this.toSelectorCase(key));
+    return elem.getAttribute(sams.modConf.PREFIX_ + this.toSelectorCase(key));
   }
 };
 
@@ -89,7 +89,7 @@ Sams.Core.prototype.getDataSet = function(elem, key) {
  * @param {string} str The string in camelCase form.
  * @return {string} The string in selector-case form.
  */
-Sams.Core.prototype.toSelectorCase = function(str) {
+sams.core.prototype.toSelectorCase = function(str) {
   return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
 };
 
@@ -99,7 +99,7 @@ Sams.Core.prototype.toSelectorCase = function(str) {
  * instantiate the associated modules.
  * @param {Element=} opt_rootElem Optional root element used to locate modules.
  */
-Sams.Core.prototype.executeModules = function(opt_rootElem) {
+sams.core.prototype.executeModules = function(opt_rootElem) {
   var modContainers = this.locateModules(opt_rootElem);
 
   modContainers.forEach(function(currentValue, index, array) {
@@ -115,7 +115,7 @@ Sams.Core.prototype.executeModules = function(opt_rootElem) {
  * @param {string} str The string in selector-case form.
  * @return {string} The string in camelCase form.
  */
-Sams.Core.prototype.toCamelCase = function(str) {
+sams.core.prototype.toCamelCase = function(str) {
   return String(str).replace(/\-([a-z])/g, function(all, match) {
     return match.toUpperCase();
   });
@@ -136,7 +136,7 @@ Sams.Core.prototype.toCamelCase = function(str) {
  *     it will be casted to one.
  * @return {string} The concatenation of {@code var_args}.
  */
-Sams.Core.prototype.buildString = function(var_args) {
+sams.core.prototype.buildString = function(var_args) {
   return Array.prototype.join.call(arguments, '');
 };
 
@@ -146,7 +146,7 @@ Sams.Core.prototype.buildString = function(var_args) {
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a function.
  */
-Sams.Core.prototype.isFunction = function(val) {
+sams.core.prototype.isFunction = function(val) {
   var getType = {};
   return val && getType.toString.call(val) === '[object Function]';
 };
