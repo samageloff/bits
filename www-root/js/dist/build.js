@@ -4,7 +4,7 @@ var Sams = {};
  * Name of data attribute containing module list
  * @enum {string}
  */
-var ModKey = {
+Sams.ModKey = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
@@ -16,13 +16,12 @@ var ModKey = {
  * Application core for locating and instantiating page modules
  * @constructor
  */
-var Core = function() {
+Sams.Core = function() {
   this.executeModules();
 };
 
 
-
-Core.prototype.knownMods = function(mod) {
+Sams.Core.prototype.knownMods = function(mod) {
   return Sams[mod];
 };
 
@@ -33,14 +32,15 @@ Core.prototype.knownMods = function(mod) {
  * @return {Array} Array of elements containing modules.
  * @private
  */
-Core.prototype.locateModules = function(rootElem) {
-  var query = document.querySelectorAll('[' + ModKey.ATTRIBUTE + ']', rootElem),
+Sams.Core.prototype.locateModules = function(rootElem) {
+  var query = document.querySelectorAll('[' + Sams.ModKey.ATTRIBUTE + ']', rootElem),
     modules = Array.prototype.slice.call(query);
   return modules;
 };
 
 
 /**
+ *
  * Identify all modules associated with the supplied element and instantiates
  * each. If there is an available config object that is passed to the module
  * constructor otherwise an empty object is supplied.
@@ -49,22 +49,22 @@ Core.prototype.locateModules = function(rootElem) {
  * @param {Array} arr Original array to iterate over.
  * @private
  */
-Core.prototype.instantiateModules = function(elem, index, arr) {
-  var data = this.getDataSet(elem, ModKey.DATA);
+Sams.Core.prototype.instantiateModules = function(elem, index, arr) {
+  var data = this.getDataSet(elem, Sams.ModKey.DATA);
   var mods = data.split(' ');
   var numberOfMods = mods.length;
   var modConfig = {};
   var modName, modPath, configAttrName;
 
   if (!elem.id) {
-    elem.id = this.buildString(this.toSelectorCase(ModKey.DATA), '-', index);
+    elem.id = this.buildString(this.toSelectorCase(Sams.ModKey.DATA), '-', index);
   }
 
   for (var i = 0; i < numberOfMods; i += 1) {
     modName = mods[i];
     modPath = this.knownMods(modName);
     configAttrName = this.toCamelCase(this.buildString(
-        ModKey.CONFIG_PREFIX, '-', modName.toLowerCase()));
+        Sams.ModKey.CONFIG_PREFIX, '-', modName.toLowerCase()));
 
     if (this.isFunction(modPath)) {
       new modPath(elem, modConfig);
@@ -73,11 +73,11 @@ Core.prototype.instantiateModules = function(elem, index, arr) {
 };
 
 
-Core.prototype.getDataSet = function(elem, key) {
+Sams.Core.prototype.getDataSet = function(elem, key) {
   if (elem.dataset) {
     return elem.dataset[key];
   } else {
-    return elem.getAttribute(ModKey.PREFIX_ + this.toSelectorCase(key));
+    return elem.getAttribute(Sams.ModKey.PREFIX_ + this.toSelectorCase(key));
   }
 };
 
@@ -89,7 +89,7 @@ Core.prototype.getDataSet = function(elem, key) {
  * @param {string} str The string in camelCase form.
  * @return {string} The string in selector-case form.
  */
-Core.prototype.toSelectorCase = function(str) {
+Sams.Core.prototype.toSelectorCase = function(str) {
   return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
 };
 
@@ -99,7 +99,7 @@ Core.prototype.toSelectorCase = function(str) {
  * instantiate the associated modules.
  * @param {Element=} opt_rootElem Optional root element used to locate modules.
  */
-Core.prototype.executeModules = function(opt_rootElem) {
+Sams.Core.prototype.executeModules = function(opt_rootElem) {
   var modContainers = this.locateModules(opt_rootElem);
 
   modContainers.forEach(function(currentValue, index, array) {
@@ -115,7 +115,7 @@ Core.prototype.executeModules = function(opt_rootElem) {
  * @param {string} str The string in selector-case form.
  * @return {string} The string in camelCase form.
  */
-Core.prototype.toCamelCase = function(str) {
+Sams.Core.prototype.toCamelCase = function(str) {
   return String(str).replace(/\-([a-z])/g, function(all, match) {
     return match.toUpperCase();
   });
@@ -136,7 +136,7 @@ Core.prototype.toCamelCase = function(str) {
  *     it will be casted to one.
  * @return {string} The concatenation of {@code var_args}.
  */
-Core.prototype.buildString = function(var_args) {
+Sams.Core.prototype.buildString = function(var_args) {
   return Array.prototype.join.call(arguments, '');
 };
 
@@ -146,14 +146,35 @@ Core.prototype.buildString = function(var_args) {
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a function.
  */
-Core.prototype.isFunction = function(val) {
+Sams.Core.prototype.isFunction = function(val) {
   var getType = {};
   return val && getType.toString.call(val) === '[object Function]';
-};;Sams.accordion = function (elem) {
+};
+Sams.Util = function() {};
+
+/**
+ * [transitionEndEventName to detect browser]
+ */
+Sams.Util.transitionEndEventName = function() {
+  var i,
+    el = document.createElement('div'),
+    transitions = {
+      'transition':'transitionend',
+      'MozTransition':'transitionend',
+      'WebkitTransition':'webkitTransitionEnd'
+  };
+
+  for (i in transitions) {
+    if (transitions.hasOwnProperty(i) && el.style[i] !== undefined) {
+      return transitions[i];
+    }
+  }
+};
+Sams.accordion = function (elem, config) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',
@@ -205,11 +226,22 @@ Sams.accordion.prototype.tearDown = function (panel) {
     }
   });
 
-};;Sams.slideshow = function (elem) {
+};
+ // TODOS:
+ // disable prev/next when at front/back of slideshow
+ //       fluid width
+ //       option: set starting value
+ //       option: circular
+ //       option: indicies
+ //       option: left/right arrow
+ //       vertical vs horizontal
+ //       animation options
+
+Sams.slideshow = function (elem, config) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',
@@ -221,6 +253,9 @@ Sams.accordion.prototype.tearDown = function (panel) {
   this.panels = Array.prototype.slice.call(this.panelGroup);
   this.wrapper = this.elem.querySelector(this.config.wrapper);
   this.list = this.wrapper.children[0];
+
+  // Set up transition end
+  this.transitionEnd = Sams.Util.transitionEndEventName();
 
   this.collection = [];
 
@@ -301,7 +336,7 @@ Sams.slideshow.prototype.getPreviousItem = function () {
     var position = this.collection[currentIndex].position;
     this.list.style.webkitTransform = 'translateX(-' + position + ')';
 
-    this.list.addEventListener('webkitTransitionEnd', function () {
+    this.list.addEventListener(this.transitionEnd, function () {
       this.updateCurrentClass(currentIndex);
     }.bind(this));
   }
@@ -314,7 +349,7 @@ Sams.slideshow.prototype.getNextItem = function () {
     var position = this.collection[currentIndex].position;
     this.list.style.webkitTransform = 'translateX(-' + position + ')';
 
-    this.list.addEventListener('webkitTransitionEnd', function () {
+    this.list.addEventListener(this.transitionEnd, function () {
       this.updateCurrentClass(currentIndex);
     }.bind(this));
   }
@@ -328,5 +363,6 @@ Sams.slideshow.prototype.updateCurrentClass = function (currentIndex) {
 
 Sams.slideshow.prototype.generateId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
-};;// Initialize the core
-var start = new Core();
+};
+// Initialize the core
+var start = new Sams.Core();

@@ -1,8 +1,8 @@
-Sams.accordion = function (elem) {
+Sams.accordion = function (elem, config) {
 
   "use strict";
 
-  this.elem = document.querySelector(elem);
+  this.elem = elem;
 
   this.config = {
     'panel': '.panel',
