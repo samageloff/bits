@@ -1,11 +1,12 @@
  // TODOS:
  // disable prev/next when at front/back of slideshow
- //       find "correct" solution instead of using _self
  //       fluid width
  //       option: set starting value
  //       option: circular
  //       option: indicies
  //       option: left/right arrow
+ //       vertical vs horizontal
+ //       animation options
 
 Sams.slideshow = function (elem, config) {
 
@@ -23,6 +24,9 @@ Sams.slideshow = function (elem, config) {
   this.panels = Array.prototype.slice.call(this.panelGroup);
   this.wrapper = this.elem.querySelector(this.config.wrapper);
   this.list = this.wrapper.children[0];
+
+  // Set up transition end
+  this.transitionEnd = Sams.Util.transitionEndEventName();
 
   this.collection = [];
 
@@ -103,7 +107,7 @@ Sams.slideshow.prototype.getPreviousItem = function () {
     var position = this.collection[currentIndex].position;
     this.list.style.webkitTransform = 'translateX(-' + position + ')';
 
-    this.list.addEventListener('webkitTransitionEnd', function () {
+    this.list.addEventListener(this.transitionEnd, function () {
       this.updateCurrentClass(currentIndex);
     }.bind(this));
   }
@@ -116,7 +120,7 @@ Sams.slideshow.prototype.getNextItem = function () {
     var position = this.collection[currentIndex].position;
     this.list.style.webkitTransform = 'translateX(-' + position + ')';
 
-    this.list.addEventListener('webkitTransitionEnd', function () {
+    this.list.addEventListener(this.transitionEnd, function () {
       this.updateCurrentClass(currentIndex);
     }.bind(this));
   }

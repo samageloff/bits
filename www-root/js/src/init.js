@@ -1,2 +1,2 @@
 // Initialize the core
-var start = new Core();
+var start = new Sams.Core();

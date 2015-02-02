@@ -78,7 +78,7 @@ blockquote cite {
 .slideshow {
 	margin: 0 auto;
 	position: relative;
-	width: 640px;
+	width: 100%;
 }
 
 .slideshow button {
@@ -96,8 +96,7 @@ blockquote cite {
 
 .slideshow-wrapper {
 	position: relative;
-	height: 480px;
-	width: 640px;
+	height: 720px;
 	overflow: hidden;
 }
 
@@ -112,13 +111,19 @@ blockquote cite {
 }
 
 .slideshow-wrapper ul li {
-	height: 480px;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  position: relative;
 	float: left;
-	width: 640px;
+	width: 960px;
 }
 
 .slideshow-wrapper ul li img {
-	max-height: 480px;
+	position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+
+/*	height: auto !important;
+	max-width: 100%;*/
 }
 
 

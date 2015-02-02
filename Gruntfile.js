@@ -20,7 +20,12 @@ module.exports = function(grunt) {
 
     concat: {
       dist: {
-        src: ['www-root/js/src/core.js', 'www-root/js/src/mods/**/*.js', 'www-root/js/src/init.js'],
+        src: [
+          'www-root/js/src/core.js',
+          'www-root/js/src/util.js',
+          'www-root/js/src/mods/**/*.js',
+          'www-root/js/src/init.js'
+        ],
         dest: 'www-root/js/dist/build.js',
       },
     },
