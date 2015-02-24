@@ -1,161 +1,11 @@
-var sams = {};
+var SAMS = {};
 
-/**
- * Name of data attribute containing module list
- * @enum {string}
- */
-sams.modConf = {
-  ATTRIBUTE: 'data-mod',
-  DATA: 'mod',
-  CONFIG_PREFIX: 'conf',
-  PREFIX_: 'data-'
-};
-
-
-/**
- * Application core for locating and instantiating page modules
- * @constructor
- */
-sams.core = function() {
-  this.executeModules();
-};
-
-
-sams.core.prototype.knownMods = function(mod) {
-  return sams[mod];
-};
-
-
-/**
- * Search the DOM to locate all elements with associated modules.
- * @param {Element} rootElem Root element used to locate modules.
- * @return {Array} Array of elements containing modules.
- * @private
- */
-sams.core.prototype.locateModules = function(rootElem) {
-  var query = document.querySelectorAll('[' + sams.modConf.ATTRIBUTE + ']', rootElem),
-    modules = Array.prototype.slice.call(query);
-  return modules;
-};
-
-
-/**
- *
- * Identify all modules associated with the supplied element and instantiates
- * each. If there is an available config object that is passed to the module
- * constructor otherwise an empty object is supplied.
- * @param {Element} elem Module root element.
- * @param {number} index Numerical index in the array.
- * @param {Array} arr Original array to iterate over.
- * @private
- */
-sams.core.prototype.instantiateModules = function(elem, index, arr) {
-  var data = this.getDataSet(elem, sams.modConf.DATA);
-  var mods = data.split(' ');
-  var numberOfMods = mods.length;
-  var modConfig = {};
-  var modName, modPath, configAttrName;
-
-  if (!elem.id) {
-    elem.id = this.buildString(this.toSelectorCase(sams.modConf.DATA), '-', index);
-  }
-
-  for (var i = 0; i < numberOfMods; i += 1) {
-    modName = mods[i];
-    modPath = this.knownMods(modName);
-    configAttrName = this.toCamelCase(this.buildString(
-        sams.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
-
-    if (this.isFunction(modPath)) {
-      new modPath(elem, modConfig);
-    }
-  }
-};
-
-
-sams.core.prototype.getDataSet = function(elem, key) {
-  if (elem.dataset) {
-    return elem.dataset[key];
-  } else {
-    return elem.getAttribute(sams.modConf.PREFIX_ + this.toSelectorCase(key));
-  }
-};
-
-
-/**
- * Converts a string from camelCase to selector-case (e.g. from
- * "multiPartString" to "multi-part-string"), useful for converting JS
- * style and dataset properties to equivalent CSS selectors and HTML keys.
- * @param {string} str The string in camelCase form.
- * @return {string} The string in selector-case form.
- */
-sams.core.prototype.toSelectorCase = function(str) {
-  return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
-};
-
-
-/**
- * Locate all modules in the DOM or within the supplied root element and
- * instantiate the associated modules.
- * @param {Element=} opt_rootElem Optional root element used to locate modules.
- */
-sams.core.prototype.executeModules = function(opt_rootElem) {
-  var modContainers = this.locateModules(opt_rootElem);
-
-  modContainers.forEach(function(currentValue, index, array) {
-    this.instantiateModules(currentValue, index, array);
-  }.bind(this));
-};
-
-
-/**
- * Converts a string from selector-case to camelCase (e.g. from
- * "multi-part-string" to "multiPartString"), useful for converting
- * CSS selectors and HTML dataset keys to their equivalent JS properties.
- * @param {string} str The string in selector-case form.
- * @return {string} The string in camelCase form.
- */
-sams.core.prototype.toCamelCase = function(str) {
-  return String(str).replace(/\-([a-z])/g, function(all, match) {
-    return match.toUpperCase();
-  });
-};
-
-
-/**
- * Concatenates string expressions. This is useful
- * since some browsers are very inefficient when it comes to using plus to
- * concat strings. Be careful when using null and undefined here since
- * these will not be included in the result. If you need to represent these
- * be sure to cast the argument to a String first.
- * For example:
- * <pre>buildString('a', 'b', 'c', 'd') -> 'abcd'
- * buildString(null, undefined) -> ''
- * </pre>
- * @param {...*} var_args A list of strings to concatenate. If not a string,
- *     it will be casted to one.
- * @return {string} The concatenation of {@code var_args}.
- */
-sams.core.prototype.buildString = function(var_args) {
-  return Array.prototype.join.call(arguments, '');
-};
-
-
-/**
- * Returns true if the specified value is a function.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a function.
- */
-sams.core.prototype.isFunction = function(val) {
-  var getType = {};
-  return val && getType.toString.call(val) === '[object Function]';
-};
-sams.util = function() {};
+SAMS.util = function() {};
 
 /**
  * [transitionEndEventName to detect browser]
  */
-sams.util.transitionEndEventName = function() {
+SAMS.util.transitionEndEventName = function() {
   var i,
     el = document.createElement('div'),
     transitions = {
@@ -181,7 +31,7 @@ sams.util.transitionEndEventName = function() {
  *     (in other words, whether element has the class after this function has
  *     been called).
  */
-sams.util.toggle = function(element, className) {
+SAMS.util.toggle = function(element, className) {
   var add = !element.classlist.contains(element, className);
   element.classlist.enable(element, className, add);
   return add;
@@ -196,7 +46,7 @@ sams.util.toggle = function(element, className) {
  * @param {boolean} enabled Whether to add or remove the class (true adds,
  *     false removes).
  */
-sams.util.enable = function(element, className, enabled) {
+SAMS.util.enable = function(element, className, enabled) {
   if (enabled) {
     element.classlist.add(element, className);
   } else {
@@ -204,7 +54,261 @@ sams.util.enable = function(element, className, enabled) {
   }
 };
 
-sams.accordion = function (elem, config) {
+
+/**
+ * Returns an object with vendor prefix references
+ */
+SAMS.util.vendorPrefix = function() {
+  var styles = window.getComputedStyle(document.documentElement, ''),
+    pre = (Array.prototype.slice
+      .call(styles)
+      .join('')
+      .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
+    )[1],
+    dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
+  return {
+    dom: dom,
+    lowercase: pre,
+    css: '-' + pre + '-',
+    js: pre[0].toUpperCase() + pre.substr(1)
+  };
+};
+
+
+/**
+ * Converts a string from camelCase to selector-case (e.g. from
+ * "multiPartString" to "multi-part-string"), useful for converting JS
+ * style and dataset properties to equivalent CSS selectors and HTML keys.
+ * @param {string} str The string in camelCase form.
+ * @return {string} The string in selector-case form.
+ */
+SAMS.util.toSelectorCase = function(str) {
+  return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
+};
+
+
+/**
+ * Converts a string from selector-case to camelCase (e.g. from
+ * "multi-part-string" to "multiPartString"), useful for converting
+ * CSS selectors and HTML dataset keys to their equivalent JS properties.
+ * @param {string} str The string in selector-case form.
+ * @return {string} The string in camelCase form.
+ */
+SAMS.util.toCamelCase = function(str) {
+  return String(str).replace(/\-([a-z])/g, function(all, match) {
+    return match.toUpperCase();
+  });
+};
+
+
+/**
+ * Converts a lowercase string to a capitalized string
+ * @return {string}
+ */
+SAMS.util.toCapitalised = function() {
+  return this.charAt(0).toUpperCase() + this.split(1);
+};
+
+
+/**
+ * Concatenates string expressions. This is useful
+ * since some browsers are very inefficient when it comes to using plus to
+ * concat strings. Be careful when using null and undefined here since
+ * these will not be included in the result. If you need to represent these
+ * be sure to cast the argument to a String first.
+ * For example:
+ * <pre>buildString('a', 'b', 'c', 'd') -> 'abcd'
+ * buildString(null, undefined) -> ''
+ * </pre>
+ * @param {...*} var_args A list of strings to concatenate. If not a string,
+ *     it will be casted to one.
+ * @return {string} The concatenation of {@code var_args}.
+ */
+SAMS.util.buildString = function(var_args) {
+  return Array.prototype.join.call(arguments, '');
+};
+
+
+/**
+ * Returns true if the specified value is a function.
+ * @param {?} val Variable to test.
+ * @return {boolean} Whether variable is a function.
+ */
+SAMS.util.isFunction = function(val) {
+  var getType = {};
+  return val && getType.toString.call(val) === '[object Function]';
+};
+
+
+/**
+ * Gets all custom data attributes as a string map.  The attribute names will be
+ * camel cased (e.g., data-foo-bar -> dataset['fooBar']).  This operation is not
+ * safe for attributes having camel-cased names clashing with already existing
+ * properties (e.g., data-to-string -> dataset['toString']).
+ * @param {!Element} element DOM node to get the data attributes from.
+ * @return {!Object} The string map containing data attributes and their
+ *     respective values.
+ */
+SAMS.util.getAllDataSets = function(element) {
+  if (element.dataset) {
+    return element.dataset;
+  } else {
+    var dataset = {};
+    var attributes = element.attributes;
+    for (var i = 0; i < attributes.length; ++i) {
+      var attribute = attributes[i];
+      if (SAMS.util.startsWith(attribute.name,
+                                 SAMS.modConf.PREFIX_)) {
+        // We use substr(5), since it's faster than replacing 'data-' with ''.
+        var key = SAMS.util.toCamelCase(attribute.name.substr(5));
+        dataset[key] = attribute.value;
+      }
+    }
+    return dataset;
+  }
+};
+
+
+/**
+ * Fast prefix-checker.
+ * @param {string} str The string to check.
+ * @param {string} prefix A string to look for at the start of {@code str}.
+ * @return {boolean} True if {@code str} begins with {@code prefix}.
+ */
+SAMS.util.startsWith = function(str, prefix) {
+  return str.lastIndexOf(prefix, 0) === 0;
+};
+
+SAMS.obj = function() {};
+
+
+/**
+ *
+ * @return {Boolean} [description]
+ */
+SAMS.obj.has = function(obj, key) {
+  return hasOwnProperty.call(obj, key);
+};
+
+
+/**
+ * Extends an object with another object
+ * This operates 'in-place'; it does not create a new Object.
+ */
+SAMS.obj.extend = function(target, var_args) {
+  var key, source;
+  for (var i = 1; i < arguments.length; i++) {
+    source = arguments[i];
+    for (key in source) {
+      target[key] = source[key];
+    }
+  }
+};
+
+
+
+/**
+ * Name of data attribute containing module list
+ * @enum {string}
+ */
+SAMS.modConf = {
+  ATTRIBUTE: 'data-mod',
+  DATA: 'mod',
+  CONFIG_PREFIX: 'conf',
+  PREFIX_: 'data-'
+};
+
+
+/**
+ * Application core for locating and instantiating page modules
+ * @constructor
+ */
+SAMS.core = function() {
+  this.executeModules();
+};
+
+
+SAMS.core.prototype.knownMods = function(mod) {
+  return SAMS[mod];
+};
+
+
+/**
+ * Search the DOM to locate all elements with associated modules.
+ * @param {Element} rootElem Root element used to locate modules.
+ * @return {Array} Array of elements containing modules.
+ * @private
+ */
+SAMS.core.prototype.locateModules = function(rootElem) {
+  var query = document.querySelectorAll('[' + SAMS.modConf.ATTRIBUTE + ']',
+      rootElem),
+    modules = Array.prototype.slice.call(query);
+  return modules;
+};
+
+
+/**
+ *
+ * Identify all modules associated with the supplied element and instantiates
+ * each. If there is an available config object that is passed to the module
+ * constructor otherwise an empty object is supplied.
+ * @param {Element} elem Module root element.
+ * @param {number} index Numerical index in the array.
+ * @param {Array} arr Original array to iterate over.
+ * @private
+ */
+SAMS.core.prototype.instantiateModules = function(elem, index, arr) {
+  var data = SAMS.util.getAllDataSets(elem);
+  var mods = data[SAMS.modConf.DATA].split(' ');
+  var numberOfMods = mods.length;
+  var modConfig = {};
+  var modName, modPath, configAttrName;
+
+  if (!elem.id) {
+    elem.id = SAMS.util.buildString(
+        SAMS.util.toSelectorCase(SAMS.modConf.DATA), '-', index);
+  }
+
+  for (var i = 0; i < numberOfMods; i += 1) {
+    modName = mods[i];
+    modPath = this.knownMods(modName);
+    configAttrName = SAMS.util.toCamelCase(SAMS.util.buildString(
+        SAMS.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
+
+    if (configAttrName in data) {
+      modConfig = JSON.parse(data[configAttrName].replace(/'/g, '"'));
+    }
+
+    if (SAMS.util.isFunction(modPath)) {
+      new modPath(elem, modConfig);
+    }
+  }
+};
+
+
+SAMS.core.prototype.getDataSet = function(elem, key) {
+  if (elem.dataset) {
+    return elem.dataset[key];
+  } else {
+    return elem.getAttribute(SAMS.modConf.PREFIX_ +
+        SAMS.util.toSelectorCase(key));
+  }
+};
+
+
+/**
+ * Locate all modules in the DOM or within the supplied root element and
+ * instantiate the associated modules.
+ * @param {Element=} opt_rootElem Optional root element used to locate modules.
+ */
+SAMS.core.prototype.executeModules = function(opt_rootElem) {
+  var modContainers = this.locateModules(opt_rootElem);
+
+  modContainers.forEach(function(currentValue, index, array) {
+    this.instantiateModules(currentValue, index, array);
+  }.bind(this));
+};
+SAMS.accordion = function (elem, config) {
 
   "use strict";
 
@@ -216,6 +320,8 @@ sams.accordion = function (elem, config) {
     'collapse': true
   };
 
+  SAMS.obj.extend(this.config, config);
+
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panel = Array.prototype.slice.call(this.panelGroup);
 
@@ -223,7 +329,7 @@ sams.accordion = function (elem, config) {
 
 };
 
-sams.accordion.prototype.init = function () {
+SAMS.accordion.prototype.init = function () {
 
   this.panel.forEach(function (currentValue) {
     var header = currentValue.children[0];
@@ -236,7 +342,7 @@ sams.accordion.prototype.init = function () {
 
 };
 
-sams.accordion.prototype.handleClick = function (header, event) {
+SAMS.accordion.prototype.handleClick = function (header, event) {
 
   var currentPanel = event.target.parentElement;
 
@@ -252,7 +358,7 @@ sams.accordion.prototype.handleClick = function (header, event) {
 
 };
 
-sams.accordion.prototype.tearDown = function (panel) {
+SAMS.accordion.prototype.tearDown = function (panel) {
 
   panel.forEach(function (currentValue) {
     if (currentValue.classList.contains('active')) {
@@ -263,7 +369,6 @@ sams.accordion.prototype.tearDown = function (panel) {
 };
  // TODOS:
  // disable prev/next when at front/back of slideshow
- //       fluid width
  //       option: set starting value
  //       option: circular
  //       option: indicies
@@ -271,7 +376,13 @@ sams.accordion.prototype.tearDown = function (panel) {
  //       vertical vs horizontal
  //       animation options
 
-sams.slideshow = function (elem, config) {
+/**
+ * [slideshow description]
+ * @param  {[type]} elem   [description]
+ * @param  {[type]} config [description]
+ * @return {[type]}        [description]
+ */
+SAMS.slideshow = function (elem, config) {
 
   "use strict";
 
@@ -280,35 +391,102 @@ sams.slideshow = function (elem, config) {
   this.config = {
     'panel': '.panel',
     'wrapper': '.slideshow-wrapper',
-    'current': '.current'
+    'wrapperInner': '.slideshow-wrapper-inner',
+    'current': '.is-current',
+    'navigation': true,
+    'indicies': true
   };
+
+  // Extend the config object with custom attributes
+  SAMS.obj.extend(this.config, config);
+
+  // Store reference to vendor prefix
+  this.vendorPrefix = SAMS.util.vendorPrefix();
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panels = Array.prototype.slice.call(this.panelGroup);
   this.wrapper = this.elem.querySelector(this.config.wrapper);
-  this.list = this.wrapper.children[0];
+  this.wrapperInner = this.elem.querySelector(this.config.wrapperInner);
+  this.list = this.wrapperInner.children[0];
 
   // Set up transition end
-  this.transitionEnd = sams.util.transitionEndEventName();
+  this.transitionEnd = SAMS.util.transitionEndEventName();
 
   this.collection = [];
 
   this.init();
 };
 
-sams.slideshow.prototype.init = function () {
-  this.list.style.width = this.calculateDimensions();
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.init = function () {
+  this.calculateDimensions();
   this.generateControls();
   this.bindEvents();
 };
 
-sams.slideshow.prototype.calculateDimensions = function () {
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.generateControls = function () {
+  if (this.config.navigation) {
+    this.createPrevNext();
+  }
+  if (this.config.indicies) {
+    this.createIndicies();
+  }
+};
+
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.bindEvents = function () {
+  var body = document.getElementsByTagName('body')[0];
+
+  if (this.config.navigation) {
+    this.prevBtn.addEventListener('click', function () {
+      this.getPreviousItem();
+    }.bind(this));
+
+    this.nextBtn.addEventListener('click', function () {
+      this.getNextItem();
+    }.bind(this));
+  }
+
+  // Bind prev/next to arrow keys
+  body.onkeydown = function(event) {
+    var key = event || window.event;
+    var keyCode = key.keyCode;
+
+    if (keyCode === 39) {
+      this.getNextItem();
+    }
+    else if (keyCode === 37) {
+      this.getPreviousItem();
+    }
+  }.bind(this);
+
+};
+
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.calculateDimensions = function () {
   var slideshow_width = 0;
 
   this.panels.forEach(function (currentValue, index, array) {
 
     var id = this.generateId(),
-      position = (100 / array.length) * index + '%',
+      position = 100 * index + '%',
       obj = {};
 
     currentValue.setAttribute('id', id);
@@ -324,37 +502,63 @@ sams.slideshow.prototype.calculateDimensions = function () {
   return slideshow_width + 'px';
 };
 
-sams.slideshow.prototype.generateControls = function () {
-  function createButton(id, klass) {
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.createPrevNext = function() {
+  function createButton(id, text, klass) {
     var button = document.createElement('button');
     button.setAttribute('id', id);
     button.setAttribute('class', klass);
-    button.textContent = id;
+    button.textContent = text;
     return button;
   }
 
-  this.prevBtn = createButton('previous', 'navigation');
-  this.nextBtn = createButton('next', 'navigation');
+  this.prevBtn = createButton('previous', '‹', SAMS.slideshow.cssClass.BUTTON);
+  this.nextBtn = createButton('next', '›', SAMS.slideshow.cssClass.BUTTON);
 
-  this.wrapper.parentElement.appendChild(this.prevBtn);
-  this.wrapper.parentElement.appendChild(this.nextBtn);
+  this.wrapperInner.parentNode.appendChild(this.prevBtn);
+  this.wrapperInner.parentNode.appendChild(this.nextBtn);
 };
 
-sams.slideshow.prototype.bindEvents = function () {
-  this.prevBtn.addEventListener('click', function () {
-    this.getPreviousItem();
-  }.bind(this));
 
-  this.nextBtn.addEventListener('click', function () {
-    this.getNextItem();
-  }.bind(this));
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.createIndicies = function() {
+  var indicieWrap = document.createElement('div');
+  var indicieList = document.createElement('ul');
+  indicieWrap.setAttribute('class', 'indicies');
+  indicieWrap.appendChild(indicieList);
+
+  this.panels.forEach(function (currentValue, index, array) {
+    var indicie = document.createElement('li');
+    var button = document.createElement('button');
+
+    button.setAttribute('class', SAMS.slideshow.cssClass.INDICIE);
+    button.dataset.item = index;
+
+    indicie.appendChild(button);
+    indicieList.appendChild(indicie);
+  });
+
+  this.wrapper.appendChild(indicieWrap);
 };
 
-sams.slideshow.prototype.getCurrentIndex = function () {
+
+/**
+ *
+ * @return {object}
+ * TODO: rewrite to optimize. shouldn't need to loop each time
+ */
+SAMS.slideshow.prototype.getCurrentIndex = function () {
   var obj = {};
 
   this.panels.forEach(function (currentValue, index) {
-    if (currentValue.classList.contains('current')) {
+    if (currentValue.classList.contains(SAMS.slideshow.cssClass.CURRENT)) {
       obj.current = index;
       obj.previous = index - 1;
       obj.next = index + 1;
@@ -363,40 +567,99 @@ sams.slideshow.prototype.getCurrentIndex = function () {
   return obj;
 };
 
-sams.slideshow.prototype.getPreviousItem = function () {
+
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.getPreviousItem = function () {
   var currentIndex = this.getCurrentIndex().previous;
 
   if (currentIndex !== -1) {
     var position = this.collection[currentIndex].position;
-    this.list.style.webkitTransform = 'translateX(-' + position + ')';
+    this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
+        'translateX(-' + position + ')';
 
-    this.list.addEventListener(this.transitionEnd, function () {
-      this.updateCurrentClass(currentIndex);
-    }.bind(this));
+    this.list.addEventListener(this.transitionEnd,
+        this.updateCurrentClass(currentIndex));
   }
 };
 
-sams.slideshow.prototype.getNextItem = function () {
+
+/**
+ *
+ *
+ */
+SAMS.slideshow.prototype.getNextItem = function () {
   var currentIndex = this.getCurrentIndex().next;
 
   if (currentIndex <= this.collection.length - 1) {
     var position = this.collection[currentIndex].position;
-    this.list.style.webkitTransform = 'translateX(-' + position + ')';
+    this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
+        'translateX(-' + position + ')';
 
-    this.list.addEventListener(this.transitionEnd, function () {
-      this.updateCurrentClass(currentIndex);
-    }.bind(this));
+    this.list.addEventListener(this.transitionEnd,
+        this.updateCurrentClass(currentIndex));
   }
 };
 
-sams.slideshow.prototype.updateCurrentClass = function (currentIndex) {
+
+/**
+ *
+ * @param {number} currentIndex
+ */
+SAMS.slideshow.prototype.updateCurrentClass = function (currentIndex) {
   var currentSlide = this.elem.querySelector(this.config.current);
-  currentSlide.classList.remove('current');
-  this.panels[currentIndex].classList.add('current');
+  currentSlide.classList.remove(SAMS.slideshow.cssClass.CURRENT);
+  this.panels[currentIndex].classList.add(SAMS.slideshow.cssClass.CURRENT);
+
+  this.list.removeEventListener(this.transitionEnd,
+    this.updateCurrentClass);
+
+  if (this.config.navigation) {
+    this.handleDisabledState(currentIndex);
+  }
 };
 
-sams.slideshow.prototype.generateId = function () {
+
+/**
+ * Generate a unique ID string for use in DOM
+ * @return {string} Unique ID
+ */
+SAMS.slideshow.prototype.generateId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
+
+
+/**
+ * Handles the addition and removal of disabled classes
+ * @param {number} currentIndex
+ * TODO: make elegant
+ */
+SAMS.slideshow.prototype.handleDisabledState = function (currentIndex) {
+  if (currentIndex === this.collection.length -1) {
+    this.nextBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
+  }
+  else if (currentIndex === 0) {
+    this.prevBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
+  }
+  else {
+    this.prevBtn.classList.remove(SAMS.slideshow.cssClass.DISABLED);
+    this.nextBtn.classList.remove(SAMS.slideshow.cssClass.DISABLED);
+  }
+};
+
+
+/**
+ * CSS Class collection
+ * @type {Object}
+ */
+SAMS.slideshow.cssClass = {
+  'BUTTON': 'button button-circle button-jumbo button-primary',
+  'INDICIE': 'button button-circle',
+  'CURRENT': 'is-current',
+  'DISABLED': 'is-disabled'
+};
+
 // Initialize the core
-var start = new sams.core();
+var start = new SAMS.core();

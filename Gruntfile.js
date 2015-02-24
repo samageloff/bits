@@ -19,15 +19,27 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      dist: {
+      scripts: {
         src: [
-          'www-root/js/src/core.js',
           'www-root/js/src/util.js',
+          'www-root/js/src/obj.js',
+          'www-root/js/src/core.js',
           'www-root/js/src/mods/**/*.js',
           'www-root/js/src/init.js'
         ],
         dest: 'www-root/js/dist/build.js',
       },
+      styles: {
+        src: [
+          'www-root/css/normalize.css',
+          'www-root/css/grid.css',
+          'www-root/css/global.css',
+          'www-root/css/buttons.css',
+          'www-root/css/accordion.css',
+          'www-root/css/slideshow.css'
+        ],
+        dest: 'www-root/css/dist/styles.css',
+      }
     },
 
     connect: {
@@ -49,7 +61,7 @@ module.exports = function(grunt) {
         atBegin: true
       },
       scripts: {
-        files: ['Gruntfile.js', 'www-root/js/src/**/*.js'],
+        files: ['Gruntfile.js', 'www-root/js/src/**/*.js', 'www-root/css/*.css'],
         tasks: ['concat', 'jshint']
       }
     }

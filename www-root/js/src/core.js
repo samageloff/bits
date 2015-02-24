@@ -1,10 +1,8 @@
-var sams = {};
-
 /**
  * Name of data attribute containing module list
  * @enum {string}
  */
-sams.modConf = {
+SAMS.modConf = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
@@ -16,13 +14,13 @@ sams.modConf = {
  * Application core for locating and instantiating page modules
  * @constructor
  */
-sams.core = function() {
+SAMS.core = function() {
   this.executeModules();
 };
 
 
-sams.core.prototype.knownMods = function(mod) {
-  return sams[mod];
+SAMS.core.prototype.knownMods = function(mod) {
+  return SAMS[mod];
 };
 
 
@@ -32,8 +30,9 @@ sams.core.prototype.knownMods = function(mod) {
  * @return {Array} Array of elements containing modules.
  * @private
  */
-sams.core.prototype.locateModules = function(rootElem) {
-  var query = document.querySelectorAll('[' + sams.modConf.ATTRIBUTE + ']', rootElem),
+SAMS.core.prototype.locateModules = function(rootElem) {
+  var query = document.querySelectorAll('[' + SAMS.modConf.ATTRIBUTE + ']',
+      rootElem),
     modules = Array.prototype.slice.call(query);
   return modules;
 };
@@ -49,48 +48,42 @@ sams.core.prototype.locateModules = function(rootElem) {
  * @param {Array} arr Original array to iterate over.
  * @private
  */
-sams.core.prototype.instantiateModules = function(elem, index, arr) {
-  var data = this.getDataSet(elem, sams.modConf.DATA);
-  var mods = data.split(' ');
+SAMS.core.prototype.instantiateModules = function(elem, index, arr) {
+  var data = SAMS.util.getAllDataSets(elem);
+  var mods = data[SAMS.modConf.DATA].split(' ');
   var numberOfMods = mods.length;
   var modConfig = {};
   var modName, modPath, configAttrName;
 
   if (!elem.id) {
-    elem.id = this.buildString(this.toSelectorCase(sams.modConf.DATA), '-', index);
+    elem.id = SAMS.util.buildString(
+        SAMS.util.toSelectorCase(SAMS.modConf.DATA), '-', index);
   }
 
   for (var i = 0; i < numberOfMods; i += 1) {
     modName = mods[i];
     modPath = this.knownMods(modName);
-    configAttrName = this.toCamelCase(this.buildString(
-        sams.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
+    configAttrName = SAMS.util.toCamelCase(SAMS.util.buildString(
+        SAMS.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
 
-    if (this.isFunction(modPath)) {
+    if (configAttrName in data) {
+      modConfig = JSON.parse(data[configAttrName].replace(/'/g, '"'));
+    }
+
+    if (SAMS.util.isFunction(modPath)) {
       new modPath(elem, modConfig);
     }
   }
 };
 
 
-sams.core.prototype.getDataSet = function(elem, key) {
+SAMS.core.prototype.getDataSet = function(elem, key) {
   if (elem.dataset) {
     return elem.dataset[key];
   } else {
-    return elem.getAttribute(sams.modConf.PREFIX_ + this.toSelectorCase(key));
+    return elem.getAttribute(SAMS.modConf.PREFIX_ +
+        SAMS.util.toSelectorCase(key));
   }
-};
-
-
-/**
- * Converts a string from camelCase to selector-case (e.g. from
- * "multiPartString" to "multi-part-string"), useful for converting JS
- * style and dataset properties to equivalent CSS selectors and HTML keys.
- * @param {string} str The string in camelCase form.
- * @return {string} The string in selector-case form.
- */
-sams.core.prototype.toSelectorCase = function(str) {
-  return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
 };
 
 
@@ -99,54 +92,10 @@ sams.core.prototype.toSelectorCase = function(str) {
  * instantiate the associated modules.
  * @param {Element=} opt_rootElem Optional root element used to locate modules.
  */
-sams.core.prototype.executeModules = function(opt_rootElem) {
+SAMS.core.prototype.executeModules = function(opt_rootElem) {
   var modContainers = this.locateModules(opt_rootElem);
 
   modContainers.forEach(function(currentValue, index, array) {
     this.instantiateModules(currentValue, index, array);
   }.bind(this));
-};
-
-
-/**
- * Converts a string from selector-case to camelCase (e.g. from
- * "multi-part-string" to "multiPartString"), useful for converting
- * CSS selectors and HTML dataset keys to their equivalent JS properties.
- * @param {string} str The string in selector-case form.
- * @return {string} The string in camelCase form.
- */
-sams.core.prototype.toCamelCase = function(str) {
-  return String(str).replace(/\-([a-z])/g, function(all, match) {
-    return match.toUpperCase();
-  });
-};
-
-
-/**
- * Concatenates string expressions. This is useful
- * since some browsers are very inefficient when it comes to using plus to
- * concat strings. Be careful when using null and undefined here since
- * these will not be included in the result. If you need to represent these
- * be sure to cast the argument to a String first.
- * For example:
- * <pre>buildString('a', 'b', 'c', 'd') -> 'abcd'
- * buildString(null, undefined) -> ''
- * </pre>
- * @param {...*} var_args A list of strings to concatenate. If not a string,
- *     it will be casted to one.
- * @return {string} The concatenation of {@code var_args}.
- */
-sams.core.prototype.buildString = function(var_args) {
-  return Array.prototype.join.call(arguments, '');
-};
-
-
-/**
- * Returns true if the specified value is a function.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a function.
- */
-sams.core.prototype.isFunction = function(val) {
-  var getType = {};
-  return val && getType.toString.call(val) === '[object Function]';
 };
