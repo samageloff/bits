@@ -308,6 +308,75 @@ SAMS.core.prototype.executeModules = function(opt_rootElem) {
     this.instantiateModules(currentValue, index, array);
   }.bind(this));
 };
+/*!
+* Pub/Sub implementation
+* http://addyosmani.com/
+* Licensed under the GPL
+* http://jsfiddle.net/LxPrq/
+*/
+
+
+;(function ( window, doc, undef ) {
+
+  var topics = {},
+      subUid = -1,
+      pubsub = {};
+
+  pubsub.publish = function ( topic, args ) {
+
+    if (!topics[topic]) {
+      return false;
+    }
+
+    setTimeout(function () {
+      var subscribers = topics[topic],
+          len = subscribers ? subscribers.length : 0;
+
+      while (len--) {
+        subscribers[len].func(topic, args);
+      }
+    }, 0);
+
+    return true;
+
+  };
+
+  pubsub.subscribe = function ( topic, func ) {
+
+    if (!topics[topic]) {
+      topics[topic] = [];
+    }
+
+    var token = (++subUid).toString();
+    topics[topic].push({
+      token: token,
+      func: func
+    });
+    return token;
+
+  };
+
+  pubsub.unsubscribe = function ( token ) {
+    for (var m in topics) {
+      if (topics[m]) {
+        for (var i = 0, j = topics[m].length; i < j; i++) {
+          if (topics[m][i].token === token) {
+            topics[m].splice(i, 1);
+              return token;
+            }
+          }
+        }
+      }
+    return false;
+  };
+
+  getPubSub = function(){
+    return pubsub;
+  };
+
+  window.pubsub = getPubSub();
+
+}( this, this.document ));
 SAMS.accordion = function (elem, config) {
 
   "use strict";
@@ -371,8 +440,6 @@ SAMS.accordion.prototype.tearDown = function (panel) {
  // disable prev/next when at front/back of slideshow
  //       option: set starting value
  //       option: circular
- //       option: indicies
- //       option: left/right arrow
  //       vertical vs horizontal
  //       animation options
 
@@ -393,8 +460,9 @@ SAMS.slideshow = function (elem, config) {
     'wrapper': '.slideshow-wrapper',
     'wrapperInner': '.slideshow-wrapper-inner',
     'current': '.is-current',
+    'animate': false,
     'navigation': true,
-    'indicies': true
+    'counter': true
   };
 
   // Extend the config object with custom attributes
@@ -405,14 +473,18 @@ SAMS.slideshow = function (elem, config) {
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panels = Array.prototype.slice.call(this.panelGroup);
+
   this.wrapper = this.elem.querySelector(this.config.wrapper);
   this.wrapperInner = this.elem.querySelector(this.config.wrapperInner);
+
   this.list = this.wrapperInner.children[0];
 
   // Set up transition end
   this.transitionEnd = SAMS.util.transitionEndEventName();
 
   this.collection = [];
+
+  this.currentIndex = 0;
 
   this.init();
 };
@@ -436,9 +508,10 @@ SAMS.slideshow.prototype.init = function () {
 SAMS.slideshow.prototype.generateControls = function () {
   if (this.config.navigation) {
     this.createPrevNext();
+    this.handleDisabledState();
   }
-  if (this.config.indicies) {
-    this.createIndicies();
+  if (this.config.counter) {
+    this.generateCounter();
   }
 };
 
@@ -528,24 +601,22 @@ SAMS.slideshow.prototype.createPrevNext = function() {
  *
  * @return {[type]} [description]
  */
-SAMS.slideshow.prototype.createIndicies = function() {
-  var indicieWrap = document.createElement('div');
-  var indicieList = document.createElement('ul');
-  indicieWrap.setAttribute('class', 'indicies');
-  indicieWrap.appendChild(indicieList);
+SAMS.slideshow.prototype.generateCounter = function() {
+  this.countWrap = document.createElement('div');
+  this.countWrap.setAttribute('class', 'count');
 
-  this.panels.forEach(function (currentValue, index, array) {
-    var indicie = document.createElement('li');
-    var button = document.createElement('button');
+  this.elem.appendChild(this.countWrap);
+  this.updateCount();
+};
 
-    button.setAttribute('class', SAMS.slideshow.cssClass.INDICIE);
-    button.dataset.item = index;
 
-    indicie.appendChild(button);
-    indicieList.appendChild(indicie);
-  });
-
-  this.wrapper.appendChild(indicieWrap);
+/**
+ *
+ * @return {[type]} [description]
+ */
+SAMS.slideshow.prototype.updateCount = function() {
+  this.countWrap.innerHTML =
+      (this.currentIndex + 1) + ' / ' + this.collection.length;
 };
 
 
@@ -573,15 +644,21 @@ SAMS.slideshow.prototype.getCurrentIndex = function () {
  * @return {[type]} [description]
  */
 SAMS.slideshow.prototype.getPreviousItem = function () {
-  var currentIndex = this.getCurrentIndex().previous;
+  this.currentIndex = this.getCurrentIndex().previous;
 
-  if (currentIndex !== -1) {
-    var position = this.collection[currentIndex].position;
-    this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
-        'translateX(-' + position + ')';
+  if (this.currentIndex !== -1) {
+    var position = this.collection[this.currentIndex].position;
+
+    if (this.config.animate) {
+      this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
+          'translateX(-' + position + ')';
+    }
+    else {
+      this.list.style.left = '-' + position;
+    }
 
     this.list.addEventListener(this.transitionEnd,
-        this.updateCurrentClass(currentIndex));
+        this.updateCurrentClass(this.currentIndex));
   }
 };
 
@@ -591,15 +668,21 @@ SAMS.slideshow.prototype.getPreviousItem = function () {
  *
  */
 SAMS.slideshow.prototype.getNextItem = function () {
-  var currentIndex = this.getCurrentIndex().next;
+  this.currentIndex = this.getCurrentIndex().next;
 
-  if (currentIndex <= this.collection.length - 1) {
-    var position = this.collection[currentIndex].position;
-    this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
-        'translateX(-' + position + ')';
+  if (this.currentIndex <= this.collection.length - 1) {
+    var position = this.collection[this.currentIndex].position;
+
+    if (this.config.animate) {
+      this.list.style[this.vendorPrefix.lowercase + 'Transform'] =
+          'translateX(-' + position + ')';
+    }
+    else {
+      this.list.style.left = '-' + position;
+    }
 
     this.list.addEventListener(this.transitionEnd,
-        this.updateCurrentClass(currentIndex));
+        this.updateCurrentClass(this.currentIndex));
   }
 };
 
@@ -608,16 +691,19 @@ SAMS.slideshow.prototype.getNextItem = function () {
  *
  * @param {number} currentIndex
  */
-SAMS.slideshow.prototype.updateCurrentClass = function (currentIndex) {
+SAMS.slideshow.prototype.updateCurrentClass = function () {
   var currentSlide = this.elem.querySelector(this.config.current);
   currentSlide.classList.remove(SAMS.slideshow.cssClass.CURRENT);
-  this.panels[currentIndex].classList.add(SAMS.slideshow.cssClass.CURRENT);
+  this.panels[this.currentIndex].classList.add(SAMS.slideshow.cssClass.CURRENT);
 
   this.list.removeEventListener(this.transitionEnd,
     this.updateCurrentClass);
 
   if (this.config.navigation) {
-    this.handleDisabledState(currentIndex);
+    this.handleDisabledState(this.currentIndex);
+  }
+  if (this.config.counter) {
+    this.updateCount();
   }
 };
 
@@ -636,11 +722,11 @@ SAMS.slideshow.prototype.generateId = function () {
  * @param {number} currentIndex
  * TODO: make elegant
  */
-SAMS.slideshow.prototype.handleDisabledState = function (currentIndex) {
-  if (currentIndex === this.collection.length -1) {
+SAMS.slideshow.prototype.handleDisabledState = function () {
+  if (this.currentIndex === this.collection.length -1) {
     this.nextBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
   }
-  else if (currentIndex === 0) {
+  else if (this.currentIndex === 0) {
     this.prevBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
   }
   else {

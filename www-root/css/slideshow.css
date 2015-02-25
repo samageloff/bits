@@ -26,6 +26,7 @@
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+	position: relative;
 	white-space: nowrap;
 }
 
@@ -56,26 +57,8 @@
 	right: -.75em;
 }
 
-.slideshow .indicies {
-	float: left;
-	margin: 0 0 2em;
-	padding: 0;
-	width: 100%;
-}
-
-.slideshow .indicies ul {
-	margin: 0;
-	padding: 0;
-}
-
-.slideshow .indicies li {
-	float: left;
-	list-style-type: none;
-	margin: 0 .25em 0;
-	padding: 0;
-}
-
-.slideshow .indicies li button {
-	height: 15px;
-	width: 15px;
+.count {
+	position: absolute;
+	right: 0;
+	top: 0;
 }

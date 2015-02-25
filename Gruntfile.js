@@ -24,6 +24,7 @@ module.exports = function(grunt) {
           'www-root/js/src/util.js',
           'www-root/js/src/obj.js',
           'www-root/js/src/core.js',
+          'www-root/js/src/pub.js',
           'www-root/js/src/mods/**/*.js',
           'www-root/js/src/init.js'
         ],
