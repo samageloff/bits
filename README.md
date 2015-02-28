@@ -21,3 +21,13 @@ The data-mod attribute value needs to match the name of your constructor. The da
 1. npm install
 1. grunt
 1. navigate to http://localhost:9001
+
+
+# Completed modules:
+1. Slideshow
+1. Accordion
+
+## TODO:
+1. Tabs
+1. Modals
+1. Tooltips
