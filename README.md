@@ -17,11 +17,11 @@ The data-mod attribute value needs to match the name of your constructor. The da
 
 ```
 
-And the corresponding JavaScript constructor:
+### And the corresponding JavaScript constructor:
 
 ```
 bit.slideshow = function (elem, config) {
-
+...
 }
 ```
 
