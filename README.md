@@ -17,13 +17,23 @@ The data-mod attribute value needs to match the name of your constructor. The da
 
 ```
 
-# Try them yourself
+And here's the corresponding JavaScript constructor:
+
+```
+bit.slideshow = function (elem, config) {
+
+}
+```
+
+# How does it work?
+The core.js scans the document, and locates all modules with the data-mod attribute. It then instantiates and renders each module, with it's (optional) configuration object.
+
+# Try it yourself
 1. npm install
 1. grunt
 1. navigate to http://localhost:9001
 
-
-# Completed modules:
+## Completed modules:
 1. Slideshow
 1. Accordion
 
