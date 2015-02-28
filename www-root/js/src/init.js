@@ -1,2 +1,2 @@
 // Initialize the core
-var start = new SAMS.core();
+var start = new bit.core();

@@ -1,11 +1,11 @@
-var SAMS = {};
+var bit = {};
 
-SAMS.util = function() {};
+bit.util = function() {};
 
 /**
  * [transitionEndEventName to detect browser]
  */
-SAMS.util.transitionEndEventName = function() {
+bit.util.transitionEndEventName = function() {
   var i,
     el = document.createElement('div'),
     transitions = {
@@ -31,7 +31,7 @@ SAMS.util.transitionEndEventName = function() {
  *     (in other words, whether element has the class after this function has
  *     been called).
  */
-SAMS.util.toggle = function(element, className) {
+bit.util.toggle = function(element, className) {
   var add = !element.classlist.contains(element, className);
   element.classlist.enable(element, className, add);
   return add;
@@ -46,7 +46,7 @@ SAMS.util.toggle = function(element, className) {
  * @param {boolean} enabled Whether to add or remove the class (true adds,
  *     false removes).
  */
-SAMS.util.enable = function(element, className, enabled) {
+bit.util.enable = function(element, className, enabled) {
   if (enabled) {
     element.classlist.add(element, className);
   } else {
@@ -58,7 +58,7 @@ SAMS.util.enable = function(element, className, enabled) {
 /**
  * Returns an object with vendor prefix references
  */
-SAMS.util.vendorPrefix = function() {
+bit.util.vendorPrefix = function() {
   var styles = window.getComputedStyle(document.documentElement, ''),
     pre = (Array.prototype.slice
       .call(styles)
@@ -82,7 +82,7 @@ SAMS.util.vendorPrefix = function() {
  * @param {string} str The string in camelCase form.
  * @return {string} The string in selector-case form.
  */
-SAMS.util.toSelectorCase = function(str) {
+bit.util.toSelectorCase = function(str) {
   return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
 };
 
@@ -94,7 +94,7 @@ SAMS.util.toSelectorCase = function(str) {
  * @param {string} str The string in selector-case form.
  * @return {string} The string in camelCase form.
  */
-SAMS.util.toCamelCase = function(str) {
+bit.util.toCamelCase = function(str) {
   return String(str).replace(/\-([a-z])/g, function(all, match) {
     return match.toUpperCase();
   });
@@ -105,7 +105,7 @@ SAMS.util.toCamelCase = function(str) {
  * Converts a lowercase string to a capitalized string
  * @return {string}
  */
-SAMS.util.toCapitalised = function() {
+bit.util.toCapitalised = function() {
   return this.charAt(0).toUpperCase() + this.split(1);
 };
 
@@ -124,7 +124,7 @@ SAMS.util.toCapitalised = function() {
  *     it will be casted to one.
  * @return {string} The concatenation of {@code var_args}.
  */
-SAMS.util.buildString = function(var_args) {
+bit.util.buildString = function(var_args) {
   return Array.prototype.join.call(arguments, '');
 };
 
@@ -134,7 +134,7 @@ SAMS.util.buildString = function(var_args) {
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a function.
  */
-SAMS.util.isFunction = function(val) {
+bit.util.isFunction = function(val) {
   var getType = {};
   return val && getType.toString.call(val) === '[object Function]';
 };
@@ -149,7 +149,7 @@ SAMS.util.isFunction = function(val) {
  * @return {!Object} The string map containing data attributes and their
  *     respective values.
  */
-SAMS.util.getAllDataSets = function(element) {
+bit.util.getAllDataSets = function(element) {
   if (element.dataset) {
     return element.dataset;
   } else {
@@ -157,10 +157,10 @@ SAMS.util.getAllDataSets = function(element) {
     var attributes = element.attributes;
     for (var i = 0; i < attributes.length; ++i) {
       var attribute = attributes[i];
-      if (SAMS.util.startsWith(attribute.name,
-                                 SAMS.modConf.PREFIX_)) {
+      if (bit.util.startsWith(attribute.name,
+                                 bit.modConf.PREFIX_)) {
         // We use substr(5), since it's faster than replacing 'data-' with ''.
-        var key = SAMS.util.toCamelCase(attribute.name.substr(5));
+        var key = bit.util.toCamelCase(attribute.name.substr(5));
         dataset[key] = attribute.value;
       }
     }
@@ -175,18 +175,18 @@ SAMS.util.getAllDataSets = function(element) {
  * @param {string} prefix A string to look for at the start of {@code str}.
  * @return {boolean} True if {@code str} begins with {@code prefix}.
  */
-SAMS.util.startsWith = function(str, prefix) {
+bit.util.startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) === 0;
 };
 
-SAMS.obj = function() {};
+bit.obj = function() {};
 
 
 /**
  *
  * @return {Boolean} [description]
  */
-SAMS.obj.has = function(obj, key) {
+bit.obj.has = function(obj, key) {
   return hasOwnProperty.call(obj, key);
 };
 
@@ -195,7 +195,7 @@ SAMS.obj.has = function(obj, key) {
  * Extends an object with another object
  * This operates 'in-place'; it does not create a new Object.
  */
-SAMS.obj.extend = function(target, var_args) {
+bit.obj.extend = function(target, var_args) {
   var key, source;
   for (var i = 1; i < arguments.length; i++) {
     source = arguments[i];
@@ -211,7 +211,7 @@ SAMS.obj.extend = function(target, var_args) {
  * Name of data attribute containing module list
  * @enum {string}
  */
-SAMS.modConf = {
+bit.modConf = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
@@ -223,13 +223,13 @@ SAMS.modConf = {
  * Application core for locating and instantiating page modules
  * @constructor
  */
-SAMS.core = function() {
+bit.core = function() {
   this.executeModules();
 };
 
 
-SAMS.core.prototype.knownMods = function(mod) {
-  return SAMS[mod];
+bit.core.prototype.knownMods = function(mod) {
+  return bit[mod];
 };
 
 
@@ -239,8 +239,8 @@ SAMS.core.prototype.knownMods = function(mod) {
  * @return {Array} Array of elements containing modules.
  * @private
  */
-SAMS.core.prototype.locateModules = function(rootElem) {
-  var query = document.querySelectorAll('[' + SAMS.modConf.ATTRIBUTE + ']',
+bit.core.prototype.locateModules = function(rootElem) {
+  var query = document.querySelectorAll('[' + bit.modConf.ATTRIBUTE + ']',
       rootElem),
     modules = Array.prototype.slice.call(query);
   return modules;
@@ -257,41 +257,41 @@ SAMS.core.prototype.locateModules = function(rootElem) {
  * @param {Array} arr Original array to iterate over.
  * @private
  */
-SAMS.core.prototype.instantiateModules = function(elem, index, arr) {
-  var data = SAMS.util.getAllDataSets(elem);
-  var mods = data[SAMS.modConf.DATA].split(' ');
+bit.core.prototype.instantiateModules = function(elem, index, arr) {
+  var data = bit.util.getAllDataSets(elem);
+  var mods = data[bit.modConf.DATA].split(' ');
   var numberOfMods = mods.length;
   var modConfig = {};
   var modName, modPath, configAttrName;
 
   if (!elem.id) {
-    elem.id = SAMS.util.buildString(
-        SAMS.util.toSelectorCase(SAMS.modConf.DATA), '-', index);
+    elem.id = bit.util.buildString(
+        bit.util.toSelectorCase(bit.modConf.DATA), '-', index);
   }
 
   for (var i = 0; i < numberOfMods; i += 1) {
     modName = mods[i];
     modPath = this.knownMods(modName);
-    configAttrName = SAMS.util.toCamelCase(SAMS.util.buildString(
-        SAMS.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
+    configAttrName = bit.util.toCamelCase(bit.util.buildString(
+        bit.modConf.CONFIG_PREFIX, '-', modName.toLowerCase()));
 
     if (configAttrName in data) {
       modConfig = JSON.parse(data[configAttrName].replace(/'/g, '"'));
     }
 
-    if (SAMS.util.isFunction(modPath)) {
+    if (bit.util.isFunction(modPath)) {
       new modPath(elem, modConfig);
     }
   }
 };
 
 
-SAMS.core.prototype.getDataSet = function(elem, key) {
+bit.core.prototype.getDataSet = function(elem, key) {
   if (elem.dataset) {
     return elem.dataset[key];
   } else {
-    return elem.getAttribute(SAMS.modConf.PREFIX_ +
-        SAMS.util.toSelectorCase(key));
+    return elem.getAttribute(bit.modConf.PREFIX_ +
+        bit.util.toSelectorCase(key));
   }
 };
 
@@ -301,7 +301,7 @@ SAMS.core.prototype.getDataSet = function(elem, key) {
  * instantiate the associated modules.
  * @param {Element=} opt_rootElem Optional root element used to locate modules.
  */
-SAMS.core.prototype.executeModules = function(opt_rootElem) {
+bit.core.prototype.executeModules = function(opt_rootElem) {
   var modContainers = this.locateModules(opt_rootElem);
 
   modContainers.forEach(function(currentValue, index, array) {
@@ -377,7 +377,7 @@ SAMS.core.prototype.executeModules = function(opt_rootElem) {
   window.pubsub = getPubSub();
 
 }( this, this.document ));
-SAMS.accordion = function (elem, config) {
+bit.accordion = function (elem, config) {
 
   "use strict";
 
@@ -389,7 +389,7 @@ SAMS.accordion = function (elem, config) {
     'collapse': true
   };
 
-  SAMS.obj.extend(this.config, config);
+  bit.obj.extend(this.config, config);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panel = Array.prototype.slice.call(this.panelGroup);
@@ -398,7 +398,7 @@ SAMS.accordion = function (elem, config) {
 
 };
 
-SAMS.accordion.prototype.init = function () {
+bit.accordion.prototype.init = function () {
 
   this.panel.forEach(function (currentValue) {
     var header = currentValue.children[0];
@@ -411,7 +411,7 @@ SAMS.accordion.prototype.init = function () {
 
 };
 
-SAMS.accordion.prototype.handleClick = function (header, event) {
+bit.accordion.prototype.handleClick = function (header, event) {
 
   var currentPanel = event.target.parentElement;
 
@@ -427,7 +427,7 @@ SAMS.accordion.prototype.handleClick = function (header, event) {
 
 };
 
-SAMS.accordion.prototype.tearDown = function (panel) {
+bit.accordion.prototype.tearDown = function (panel) {
 
   panel.forEach(function (currentValue) {
     if (currentValue.classList.contains('active')) {
@@ -437,19 +437,16 @@ SAMS.accordion.prototype.tearDown = function (panel) {
 
 };
  // TODOS:
- // disable prev/next when at front/back of slideshow
  //       option: set starting value
  //       option: circular
- //       vertical vs horizontal
- //       animation options
 
 /**
- * [slideshow description]
- * @param  {[type]} elem   [description]
- * @param  {[type]} config [description]
- * @return {[type]}        [description]
+ * Represents a slideshow
+ * @constructor
+ * @param {object} elem  The element to which the slideshow is attached.
+ * @param {object} config Optional configuration object
  */
-SAMS.slideshow = function (elem, config) {
+bit.slideshow = function (elem, config) {
 
   "use strict";
 
@@ -460,16 +457,17 @@ SAMS.slideshow = function (elem, config) {
     'wrapper': '.slideshow-wrapper',
     'wrapperInner': '.slideshow-wrapper-inner',
     'current': '.is-current',
+    'circular': false,
     'animate': false,
     'navigation': true,
     'counter': true
   };
 
   // Extend the config object with custom attributes
-  SAMS.obj.extend(this.config, config);
+  bit.obj.extend(this.config, config);
 
   // Store reference to vendor prefix
-  this.vendorPrefix = SAMS.util.vendorPrefix();
+  this.vendorPrefix = bit.util.vendorPrefix();
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panels = Array.prototype.slice.call(this.panelGroup);
@@ -480,7 +478,7 @@ SAMS.slideshow = function (elem, config) {
   this.list = this.wrapperInner.children[0];
 
   // Set up transition end
-  this.transitionEnd = SAMS.util.transitionEndEventName();
+  this.transitionEnd = bit.util.transitionEndEventName();
 
   this.collection = [];
 
@@ -491,10 +489,9 @@ SAMS.slideshow = function (elem, config) {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Initialize the slideshow
  */
-SAMS.slideshow.prototype.init = function () {
+bit.slideshow.prototype.init = function () {
   this.calculateDimensions();
   this.generateControls();
   this.bindEvents();
@@ -502,10 +499,9 @@ SAMS.slideshow.prototype.init = function () {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Generate slideshow controls
  */
-SAMS.slideshow.prototype.generateControls = function () {
+bit.slideshow.prototype.generateControls = function () {
   if (this.config.navigation) {
     this.createPrevNext();
     this.handleDisabledState();
@@ -517,10 +513,9 @@ SAMS.slideshow.prototype.generateControls = function () {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Bind event handlers
  */
-SAMS.slideshow.prototype.bindEvents = function () {
+bit.slideshow.prototype.bindEvents = function () {
   var body = document.getElementsByTagName('body')[0];
 
   if (this.config.navigation) {
@@ -538,9 +533,11 @@ SAMS.slideshow.prototype.bindEvents = function () {
     var key = event || window.event;
     var keyCode = key.keyCode;
 
+    // next button
     if (keyCode === 39) {
       this.getNextItem();
     }
+    // previous button
     else if (keyCode === 37) {
       this.getPreviousItem();
     }
@@ -550,10 +547,9 @@ SAMS.slideshow.prototype.bindEvents = function () {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Calculate slideshow dimensions
  */
-SAMS.slideshow.prototype.calculateDimensions = function () {
+bit.slideshow.prototype.calculateDimensions = function () {
   var slideshow_width = 0;
 
   this.panels.forEach(function (currentValue, index, array) {
@@ -577,10 +573,9 @@ SAMS.slideshow.prototype.calculateDimensions = function () {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Create previous and next buttons
  */
-SAMS.slideshow.prototype.createPrevNext = function() {
+bit.slideshow.prototype.createPrevNext = function() {
   function createButton(id, text, klass) {
     var button = document.createElement('button');
     button.setAttribute('id', id);
@@ -589,8 +584,8 @@ SAMS.slideshow.prototype.createPrevNext = function() {
     return button;
   }
 
-  this.prevBtn = createButton('previous', '‹', SAMS.slideshow.cssClass.BUTTON);
-  this.nextBtn = createButton('next', '›', SAMS.slideshow.cssClass.BUTTON);
+  this.prevBtn = createButton('previous', '‹', bit.slideshow.cssClass.BUTTON);
+  this.nextBtn = createButton('next', '›', bit.slideshow.cssClass.BUTTON);
 
   this.wrapperInner.parentNode.appendChild(this.prevBtn);
   this.wrapperInner.parentNode.appendChild(this.nextBtn);
@@ -598,10 +593,9 @@ SAMS.slideshow.prototype.createPrevNext = function() {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Generate DOM for the counter
  */
-SAMS.slideshow.prototype.generateCounter = function() {
+bit.slideshow.prototype.generateCounter = function() {
   this.countWrap = document.createElement('div');
   this.countWrap.setAttribute('class', 'count');
 
@@ -611,39 +605,42 @@ SAMS.slideshow.prototype.generateCounter = function() {
 
 
 /**
- *
- * @return {[type]} [description]
+ * Update the counter
  */
-SAMS.slideshow.prototype.updateCount = function() {
+bit.slideshow.prototype.updateCount = function() {
   this.countWrap.innerHTML =
       (this.currentIndex + 1) + ' / ' + this.collection.length;
 };
 
 
 /**
- *
- * @return {object}
+ * Iterate over slideshow items, and get current index
  * TODO: rewrite to optimize. shouldn't need to loop each time
  */
-SAMS.slideshow.prototype.getCurrentIndex = function () {
+bit.slideshow.prototype.getCurrentIndex = function () {
   var obj = {};
 
+  obj.first = 0;
+  obj.last = this.panels.length;
+
   this.panels.forEach(function (currentValue, index) {
-    if (currentValue.classList.contains(SAMS.slideshow.cssClass.CURRENT)) {
+    if (currentValue.classList.contains(bit.slideshow.cssClass.CURRENT)) {
       obj.current = index;
       obj.previous = index - 1;
       obj.next = index + 1;
     }
-  });
+
+  }.bind(this));
+
   return obj;
+
 };
 
 
 /**
- *
- * @return {[type]} [description]
+ * Go to previous item in slideshow
  */
-SAMS.slideshow.prototype.getPreviousItem = function () {
+bit.slideshow.prototype.getPreviousItem = function () {
   this.currentIndex = this.getCurrentIndex().previous;
 
   if (this.currentIndex !== -1) {
@@ -664,10 +661,9 @@ SAMS.slideshow.prototype.getPreviousItem = function () {
 
 
 /**
- *
- *
+ * Go to next item in slideshow
  */
-SAMS.slideshow.prototype.getNextItem = function () {
+bit.slideshow.prototype.getNextItem = function () {
   this.currentIndex = this.getCurrentIndex().next;
 
   if (this.currentIndex <= this.collection.length - 1) {
@@ -688,13 +684,14 @@ SAMS.slideshow.prototype.getNextItem = function () {
 
 
 /**
- *
- * @param {number} currentIndex
+ * Update the current class
  */
-SAMS.slideshow.prototype.updateCurrentClass = function () {
+bit.slideshow.prototype.updateCurrentClass = function (setIndex) {
   var currentSlide = this.elem.querySelector(this.config.current);
-  currentSlide.classList.remove(SAMS.slideshow.cssClass.CURRENT);
-  this.panels[this.currentIndex].classList.add(SAMS.slideshow.cssClass.CURRENT);
+  var currentIndex = setIndex || this.currentIndex;
+  currentSlide.classList.remove(bit.slideshow.cssClass.CURRENT);
+
+  this.panels[currentIndex].classList.add(bit.slideshow.cssClass.CURRENT);
 
   this.list.removeEventListener(this.transitionEnd,
     this.updateCurrentClass);
@@ -702,9 +699,11 @@ SAMS.slideshow.prototype.updateCurrentClass = function () {
   if (this.config.navigation) {
     this.handleDisabledState(this.currentIndex);
   }
+
   if (this.config.counter) {
     this.updateCount();
   }
+
 };
 
 
@@ -712,7 +711,7 @@ SAMS.slideshow.prototype.updateCurrentClass = function () {
  * Generate a unique ID string for use in DOM
  * @return {string} Unique ID
  */
-SAMS.slideshow.prototype.generateId = function () {
+bit.slideshow.prototype.generateId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
 
@@ -722,16 +721,18 @@ SAMS.slideshow.prototype.generateId = function () {
  * @param {number} currentIndex
  * TODO: make elegant
  */
-SAMS.slideshow.prototype.handleDisabledState = function () {
-  if (this.currentIndex === this.collection.length -1) {
-    this.nextBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
-  }
-  else if (this.currentIndex === 0) {
-    this.prevBtn.classList.add(SAMS.slideshow.cssClass.DISABLED);
-  }
-  else {
-    this.prevBtn.classList.remove(SAMS.slideshow.cssClass.DISABLED);
-    this.nextBtn.classList.remove(SAMS.slideshow.cssClass.DISABLED);
+bit.slideshow.prototype.handleDisabledState = function () {
+  if (!this.config.circular) {
+    if (this.currentIndex === this.collection.length -1) {
+      this.nextBtn.classList.add(bit.slideshow.cssClass.DISABLED);
+    }
+    else if (this.currentIndex === 0) {
+      this.prevBtn.classList.add(bit.slideshow.cssClass.DISABLED);
+    }
+    else {
+      this.prevBtn.classList.remove(bit.slideshow.cssClass.DISABLED);
+      this.nextBtn.classList.remove(bit.slideshow.cssClass.DISABLED);
+    }
   }
 };
 
@@ -740,7 +741,7 @@ SAMS.slideshow.prototype.handleDisabledState = function () {
  * CSS Class collection
  * @type {Object}
  */
-SAMS.slideshow.cssClass = {
+bit.slideshow.cssClass = {
   'BUTTON': 'button button-circle button-jumbo button-primary',
   'INDICIE': 'button button-circle',
   'CURRENT': 'is-current',
@@ -748,4 +749,4 @@ SAMS.slideshow.cssClass = {
 };
 
 // Initialize the core
-var start = new SAMS.core();
+var start = new bit.core();

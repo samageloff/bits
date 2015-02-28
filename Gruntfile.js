@@ -65,6 +65,15 @@ module.exports = function(grunt) {
         files: ['Gruntfile.js', 'www-root/js/src/**/*.js', 'www-root/css/*.css'],
         tasks: ['concat', 'jshint']
       }
+    },
+
+    jsdoc: {
+      dist: {
+        src: ['README.md', 'www-root/js/src/**/*.js'],
+        options: {
+          destination: 'doc'
+        }
+      }
     }
 
   });
@@ -76,6 +85,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-jsdoc');
 
   // Default task(s).
   grunt.registerTask('default', ['concurrent:target']);

@@ -1,4 +1,4 @@
-SAMS.accordion = function (elem, config) {
+bit.accordion = function (elem, config) {
 
   "use strict";
 
@@ -10,7 +10,7 @@ SAMS.accordion = function (elem, config) {
     'collapse': true
   };
 
-  SAMS.obj.extend(this.config, config);
+  bit.obj.extend(this.config, config);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
   this.panel = Array.prototype.slice.call(this.panelGroup);
@@ -19,7 +19,7 @@ SAMS.accordion = function (elem, config) {
 
 };
 
-SAMS.accordion.prototype.init = function () {
+bit.accordion.prototype.init = function () {
 
   this.panel.forEach(function (currentValue) {
     var header = currentValue.children[0];
@@ -32,7 +32,7 @@ SAMS.accordion.prototype.init = function () {
 
 };
 
-SAMS.accordion.prototype.handleClick = function (header, event) {
+bit.accordion.prototype.handleClick = function (header, event) {
 
   var currentPanel = event.target.parentElement;
 
@@ -48,7 +48,7 @@ SAMS.accordion.prototype.handleClick = function (header, event) {
 
 };
 
-SAMS.accordion.prototype.tearDown = function (panel) {
+bit.accordion.prototype.tearDown = function (panel) {
 
   panel.forEach(function (currentValue) {
     if (currentValue.classList.contains('active')) {

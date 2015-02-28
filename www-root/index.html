@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Sams (Elemental)</title>
+		<title>bits</title>
 		<link rel="stylesheet" type="text/css" href="css/dist/styles.css">
 	</head>
 	<body>
@@ -11,7 +11,28 @@
 		<div class="col-1-1">
 			<div class="content">
 				<section>
-					<h2>Accordion</h2>
+					<h1>Introduction</h1>
+					<p>Bits are basic, configurable web components, made with JavaScript. No external library dependencies.</p>
+
+					<h2>Doesn't the web have enough of these?</h2>
+					<p>Yes. The web has plenty of these. This is an exercise in simple, dependency-free, web component development. Modules are <a href="#">be initialized</a> using a data-mod attribute, and can be passed an <a href="#">optional configuration</a> object.</p>
+
+					<hr>
+
+					<h2>Index of modules</h2>
+					<ul>
+						<li><a href="#about-accordion">Accordion</a></li>
+						<li><a href="#about-slideshow">Slideshow</a></li>
+						<li>Tabbed</li>
+						<li>Modal</li>
+						<li>Tooltip</li>
+					</ul>
+				</section>
+
+				<hr>
+
+				<section>
+					<h3 id="about-accordion">Accordion</h3>
 					<ul class="accordion" data-mod="accordion">
 						<li class="panel active">
 							<h4 class="button button-block button-primary button-large">Kitten Ipsum dolor</h4>
@@ -33,8 +54,11 @@
 						</li>
 					</ul>
 				</section>
-				<section class="slideshow" data-mod="slideshow" data-conf-slideshow="{'counter': false, 'navigation': true, 'animate': true}">
-					<h2>Slideshow</h2>
+
+				<hr>
+
+				<section class="slideshow" data-mod="slideshow" data-conf-slideshow="{'counter': true, 'navigation': true, 'animate': true}" id="about-slideshow">
+					<h3>Slideshow</h3>
 					<div class="slideshow-wrapper">
 						<div class="slideshow-wrapper-inner">
 							<ul class="panel-wrap">
@@ -47,6 +71,7 @@
 						</div>
 					</div>
 				</section>
+
 			</div>
 		</div>
 	</div>
