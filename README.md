@@ -37,7 +37,7 @@ The core.js scans the document, and locates all modules with the data-mod attrib
 1. Slideshow
 1. Accordion
 
-## TODO:
+## In the pipe:
 1. Tabs
 1. Modals
 1. Tooltips
