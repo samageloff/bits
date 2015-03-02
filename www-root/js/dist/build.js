@@ -398,6 +398,7 @@ bit.accordion = function (elem, config) {
 
 };
 
+
 bit.accordion.prototype.init = function () {
 
   this.panel.forEach(function (currentValue) {
@@ -411,31 +412,49 @@ bit.accordion.prototype.init = function () {
 
 };
 
+
 bit.accordion.prototype.handleClick = function (header, event) {
 
   var currentPanel = event.target.parentElement;
 
   if (this.config.toggle) {
-    currentPanel.classList.toggle('active');
+    currentPanel.classList.toggle(bit.accordion.cssClass.ACTIVE);
   } else {
-    if (currentPanel.classList.contains('active')) {
+    if (currentPanel.classList.contains(bit.accordion.cssClass.ACTIVE)) {
       return;
     }
     this.tearDown(this.panel);
-    currentPanel.classList.add('active');
+    currentPanel.classList.add(bit.accordion.cssClass.ACTIVE);
+    header.classList.add(bit.accordion.cssClass.DISABLED);
   }
 
 };
 
+
 bit.accordion.prototype.tearDown = function (panel) {
 
   panel.forEach(function (currentValue) {
-    if (currentValue.classList.contains('active')) {
-      currentValue.classList.remove('active');
+    var header = currentValue.children[0];
+
+    if (currentValue.classList.contains(bit.accordion.cssClass.ACTIVE)) {
+      currentValue.classList.remove(bit.accordion.cssClass.ACTIVE);
     }
+
+    header.classList.remove(bit.accordion.cssClass.DISABLED);
   });
 
 };
+
+
+/**
+ * CSS Class collection
+ * @type {Object}
+ */
+bit.accordion.cssClass = {
+  'ACTIVE': 'is-active',
+  'DISABLED': 'is-disabled'
+};
+
  // TODOS:
  //       option: set starting value
  //       option: circular
@@ -795,20 +814,25 @@ bit.tabs.prototype.handleClick = function(tab, event) {
   var panel = document.querySelector(tab);
   var currentTab = event.currentTarget;
 
-  this.panel.forEach(function (currentValue) {
+  this.tearDown.call(this.panel);
+  this.tearDown.call(this.tab);
+
+  this.activateTabPanel.call(panel);
+  this.activateTabPanel.call(currentTab);
+};
+
+
+bit.tabs.prototype.tearDown = function () {
+  this.forEach(function (currentValue) {
     if (currentValue.classList.contains(bit.tabs.cssClass.ACTIVE)) {
       currentValue.classList.remove(bit.tabs.cssClass.ACTIVE);
     }
   });
+};
 
-  this.tab.forEach(function (currentValue) {
-    if (currentValue.classList.contains(bit.tabs.cssClass.ACTIVE)) {
-      currentValue.classList.remove(bit.tabs.cssClass.ACTIVE);
-    }
-  });
 
-  currentTab.classList.add(bit.tabs.cssClass.ACTIVE);
-  panel.classList.add(bit.tabs.cssClass.ACTIVE);
+bit.tabs.prototype.activateTabPanel = function () {
+  this.classList.add(bit.tabs.cssClass.ACTIVE);
 };
 
 

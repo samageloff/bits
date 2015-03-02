@@ -19,6 +19,7 @@ bit.accordion = function (elem, config) {
 
 };
 
+
 bit.accordion.prototype.init = function () {
 
   this.panel.forEach(function (currentValue) {
@@ -32,28 +33,45 @@ bit.accordion.prototype.init = function () {
 
 };
 
+
 bit.accordion.prototype.handleClick = function (header, event) {
 
   var currentPanel = event.target.parentElement;
 
   if (this.config.toggle) {
-    currentPanel.classList.toggle('active');
+    currentPanel.classList.toggle(bit.accordion.cssClass.ACTIVE);
   } else {
-    if (currentPanel.classList.contains('active')) {
+    if (currentPanel.classList.contains(bit.accordion.cssClass.ACTIVE)) {
       return;
     }
     this.tearDown(this.panel);
-    currentPanel.classList.add('active');
+    currentPanel.classList.add(bit.accordion.cssClass.ACTIVE);
+    header.classList.add(bit.accordion.cssClass.DISABLED);
   }
 
 };
 
+
 bit.accordion.prototype.tearDown = function (panel) {
 
   panel.forEach(function (currentValue) {
-    if (currentValue.classList.contains('active')) {
-      currentValue.classList.remove('active');
+    var header = currentValue.children[0];
+
+    if (currentValue.classList.contains(bit.accordion.cssClass.ACTIVE)) {
+      currentValue.classList.remove(bit.accordion.cssClass.ACTIVE);
     }
+
+    header.classList.remove(bit.accordion.cssClass.DISABLED);
   });
 
+};
+
+
+/**
+ * CSS Class collection
+ * @type {Object}
+ */
+bit.accordion.cssClass = {
+  'ACTIVE': 'is-active',
+  'DISABLED': 'is-disabled'
 };

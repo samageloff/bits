@@ -46,20 +46,25 @@ bit.tabs.prototype.handleClick = function(tab, event) {
   var panel = document.querySelector(tab);
   var currentTab = event.currentTarget;
 
-  this.panel.forEach(function (currentValue) {
+  this.tearDown.call(this.panel);
+  this.tearDown.call(this.tab);
+
+  this.activateTabPanel.call(panel);
+  this.activateTabPanel.call(currentTab);
+};
+
+
+bit.tabs.prototype.tearDown = function () {
+  this.forEach(function (currentValue) {
     if (currentValue.classList.contains(bit.tabs.cssClass.ACTIVE)) {
       currentValue.classList.remove(bit.tabs.cssClass.ACTIVE);
     }
   });
+};
 
-  this.tab.forEach(function (currentValue) {
-    if (currentValue.classList.contains(bit.tabs.cssClass.ACTIVE)) {
-      currentValue.classList.remove(bit.tabs.cssClass.ACTIVE);
-    }
-  });
 
-  currentTab.classList.add(bit.tabs.cssClass.ACTIVE);
-  panel.classList.add(bit.tabs.cssClass.ACTIVE);
+bit.tabs.prototype.activateTabPanel = function () {
+  this.classList.add(bit.tabs.cssClass.ACTIVE);
 };
 
 
