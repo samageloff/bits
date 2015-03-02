@@ -36,6 +36,7 @@ The core.js scans the document, and locates all modules with the data-mod attrib
 ## Completed modules:
 1. Slideshow
 1. Accordion
+1. Tabs
 
 ## In the pipe:
 1. Support for vendor-prefixes
