@@ -24,5 +24,5 @@
   -webkit-transition: height .5s cubic-bezier(.55, 0, .1, 1);
   -moz-transition: height .5s cubic-bezier(.55, 0, .1, 1);
   transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  height: 300px;
+  height: 150px;
 }

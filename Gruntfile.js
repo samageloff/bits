@@ -37,7 +37,8 @@ module.exports = function(grunt) {
           'www-root/css/global.css',
           'www-root/css/buttons.css',
           'www-root/css/accordion.css',
-          'www-root/css/slideshow.css'
+          'www-root/css/slideshow.css',
+          'www-root/css/tabs.css'
         ],
         dest: 'www-root/css/dist/styles.css',
       }
