@@ -20,6 +20,7 @@
 
 .accordion .panel .header {
   cursor: pointer;
+  font-weight: normal;
   margin: 0;
   padding: 1em 0;
 }

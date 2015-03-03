@@ -859,6 +859,10 @@ bit.tooltip = function (elem, config) {
 };
 
 
+/**
+ * [init description]
+ * @return {[type]} [description]
+ */
 bit.tooltip.prototype.init = function() {
 
   this.elem.addEventListener('mouseover', function (event) {
@@ -872,12 +876,21 @@ bit.tooltip.prototype.init = function() {
 };
 
 
+/**
+ * [handleMouseOver description]
+ * @param  {[type]} event [description]
+ * @return {[type]}       [description]
+ */
 bit.tooltip.prototype.handleMouseOver = function(event) {
   var currentTip = event.currentTarget;
   this.activateTooltip(currentTip);
 };
 
 
+/**
+ * [activateTooltip description]
+ * @return {[type]} [description]
+ */
 bit.tooltip.prototype.activateTooltip = function () {
 
   if (!this.tooltip) {
@@ -894,6 +907,11 @@ bit.tooltip.prototype.activateTooltip = function () {
 };
 
 
+/**
+ * [handleMouseOut description]
+ * @param  {[type]} event [description]
+ * @return {[type]}       [description]
+ */
 bit.tooltip.prototype.handleMouseOut = function(event) {
   this.tooltip.classList.remove('active');
 };

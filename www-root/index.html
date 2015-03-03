@@ -9,29 +9,24 @@
 
 	<div class="grid grid-pad">
 		<div class="col-1-1">
-			<div class="content">
-				<section>
-					<h1>Introduction</h1>
-					<p>Bits are basic, configurable web components, made with JavaScript. No external library dependencies.</p>
+			<section>
+				<h1>Introduction</h1>
+				<p>Bits are basic, configurable web components, made with JavaScript. No external library dependencies.</p>
 
-					<h2>Doesn't the web have enough of these?</h2>
-					<p>Yes. The web has plenty of these. This is an exercise in simple, dependency-free, web component development. Modules are <a href="#">be initialized</a> using a data-mod attribute, and can be passed an <a href="#">optional configuration</a> object.</p>
+				<h2>Doesn't the web have enough of these?</h2>
+				<p>Yes. The web has plenty of these. This is an exercise in simple, dependency-free, web component development. Modules are <a href="#">be initialized</a> using a data-mod attribute, and can be passed an <a href="#">optional configuration</a> object.</p>
 
-					<hr>
+				<hr>
 
-					<h2>Index of modules</h2>
-					<ul>
-						<li><a href="#">Accordion</a></li>
-						<li><a href="#">Slideshow</a></li>
-						<li><a href="#">Tabs</a></li>
-						<li><a href="#">Tooltips</a></li>
-					</ul>
-				</section>
-			</div>
-		<hr>
-		</div>
+				<h2>Index of modules</h2>
+				<ul>
+					<li><a href="#">Accordion</a></li>
+					<li><a href="#">Slideshow</a></li>
+					<li><a href="#">Tabs</a></li>
+					<li><a href="#">Tooltips</a></li>
+				</ul>
+			</section>
 
-		<div class="col-1-2">
 			<section>
 				<h3>Accordion</h3>
 				<ul class="accordion" data-mod="accordion" data-conf-accordion="{'toggle': true}">
@@ -49,15 +44,13 @@
 					</li>
 					<li class="panel">
 						<h4 class="header">Her sleep on your face</h4>
-						<div class="content"><div class='icon icon--ei-archive  '><svg class='icon__cnt'><use xlink:href='#ei-archive-icon' /></svg></div>
+						<div class="content">
 							<p>Her sleep on your face kitty dapibus a at sollicitudin euismod eros wonderful, steal fuzzy id sits felis in boy fermentum faucibus mix Aliquam front et neque. Cats et scratched vel viverra, cat at snuggliest she sed? Suscipit Class leo siam ragdoll Class happy friend felis cats ac id eat, Nullam est fluffy amet here Gizmo convallis ultricies healing jump feline fermentum. Mom's facilisis best kitten aliquet in pellentesque convallis ipsum dapibus blandit friend's, fringilla finally waffles adipiscing reddit siamese. Sapien dui honey adipiscing cramped curiosity hairball est, sister's elementum blandit babies babies trust? Hiding, lounging sleep in the sink siamese awesomeness nulla muffin go lady?</p>
 						</div>
 					</li>
 				</ul>
 			</section>
-		</div>
 
-		<div class="col-1-2">
 			<section class="slideshow" data-mod="slideshow" data-conf-slideshow="{'counter': true, 'navigation': true, 'animate': true}">
 				<h3>Slideshow</h3>
 				<div class="slideshow-wrapper">
@@ -72,12 +65,8 @@
 					</div>
 				</div>
 			</section>
-		</div>
-	</div>
 
-	<div class="grid grid-pad">
-		<div class="col-1-2">
-			<section class="tabs" data-mod="tabs">
+			<section class="tabs clearfix" data-mod="tabs">
 				<h3>Tabs</h3>
 				<nav class="tabs-nav button-group">
 			    <button data-tab="1" type="button" class="button is-active">Option 1</button>
@@ -102,18 +91,13 @@
 					</li>
 				</ul>
 			</section>
-		</div>
 
-	</div>
-
-	<div class="grid grid-pad">
-		<div class="col-1-2">
 			<section>
 				<h3>Tooltips</h3>
 				<p>Her sleep on your <span data-mod="tooltip" data-conf-tooltip="{'text': 'Face Kitty'}">face kitty</span> dapibus a at sollicitudin euismod eros wonderful, steal fuzzy id sits felis in boy fermentum faucibus mix Aliquam front et neque. <span data-mod="tooltip" data-conf-tooltip="{'text': 'Cats: can also take plain text. Nice tooltip, bud.'}">Cats et scratched</span> vel viverra, cat at snuggliest she sed? Suscipit Class leo siam ragdoll Class happy friend felis cats ac id eat, Nullam est fluffy amet here Gizmo convallis ultricies healing jump feline fermentum. <span data-mod="tooltip" data-conf-tooltip="{'text': 'One more for the money.'}">Mom's facilisis best kitten</span> aliquet in pellentesque convallis ipsum dapibus blandit friend's, fringilla finally waffles adipiscing reddit siamese. Sapien dui honey adipiscing cramped curiosity hairball est, sister's elementum blandit babies babies trust? Hiding, lounging sleep in the sink siamese awesomeness nulla muffin go lady?</p>
 			</section>
+
 		</div>
-	</div>
 
 	<script src="js/dist/build.js"></script>
 
