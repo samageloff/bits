@@ -32,13 +32,11 @@ module.exports = function(grunt) {
       },
       styles: {
         src: [
-          'www-root/css/normalize.css',
-          'www-root/css/grid.css',
-          'www-root/css/global.css',
-          'www-root/css/buttons.css',
-          'www-root/css/accordion.css',
-          'www-root/css/slideshow.css',
-          'www-root/css/tabs.css'
+          'www-root/css/core/normalize.css',
+          'www-root/css/core/grid.css',
+          'www-root/css/core/global.css',
+          'www-root/css/core/buttons.css',
+          'www-root/css/mods/**/*.css'
         ],
         dest: 'www-root/css/dist/styles.css',
       }
@@ -63,7 +61,7 @@ module.exports = function(grunt) {
         atBegin: true
       },
       scripts: {
-        files: ['Gruntfile.js', 'www-root/js/src/**/*.js', 'www-root/css/*.css'],
+        files: ['Gruntfile.js', 'www-root/js/src/**/*.js', 'www-root/css/**/*.css'],
         tasks: ['concat', 'jshint']
       }
     },

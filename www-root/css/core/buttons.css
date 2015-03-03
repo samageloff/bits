@@ -97,17 +97,11 @@
 * The default values for the .button class
 */
 .button {
-  color: #666666;
-  background-color: #eeeeee;
-  border-color: #eeeeee;
-  font-weight: 300;
-  font-size: 16px;
-  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   text-decoration: none;
   text-align: center;
   line-height: 40px;
   height: 40px;
-  padding: 0 40px;
+  padding: 0 1em;
   margin: 0;
   display: inline-block;
   appearance: none;

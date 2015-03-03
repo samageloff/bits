@@ -400,7 +400,6 @@ bit.accordion = function (elem, config) {
 
 
 bit.accordion.prototype.init = function () {
-
   this.panel.forEach(function (currentValue) {
     var header = currentValue.children[0];
 
@@ -409,12 +408,10 @@ bit.accordion.prototype.init = function () {
     }.bind(this));
 
   }.bind(this));
-
 };
 
 
 bit.accordion.prototype.handleClick = function (header, event) {
-
   var currentPanel = event.target.parentElement;
 
   if (this.config.toggle) {
@@ -425,24 +422,16 @@ bit.accordion.prototype.handleClick = function (header, event) {
     }
     this.tearDown(this.panel);
     currentPanel.classList.add(bit.accordion.cssClass.ACTIVE);
-    header.classList.add(bit.accordion.cssClass.DISABLED);
   }
-
 };
 
 
 bit.accordion.prototype.tearDown = function (panel) {
-
   panel.forEach(function (currentValue) {
-    var header = currentValue.children[0];
-
     if (currentValue.classList.contains(bit.accordion.cssClass.ACTIVE)) {
       currentValue.classList.remove(bit.accordion.cssClass.ACTIVE);
     }
-
-    header.classList.remove(bit.accordion.cssClass.DISABLED);
   });
-
 };
 
 
@@ -451,8 +440,7 @@ bit.accordion.prototype.tearDown = function (panel) {
  * @type {Object}
  */
 bit.accordion.cssClass = {
-  'ACTIVE': 'is-active',
-  'DISABLED': 'is-disabled'
+  'ACTIVE': 'is-active'
 };
 
  // TODOS:
@@ -761,7 +749,7 @@ bit.slideshow.prototype.handleDisabledState = function () {
  * @type {Object}
  */
 bit.slideshow.cssClass = {
-  'BUTTON': 'button button-circle button-jumbo button-royal',
+  'BUTTON': 'button button-circle button-jumbo',
   'CURRENT': 'is-current',
   'DISABLED': 'is-disabled'
 };
@@ -799,7 +787,7 @@ bit.tabs = function (elem, config) {
 bit.tabs.prototype.init = function() {
 
   this.tab.forEach(function (currentValue) {
-    var tab = '#tab-' + currentValue.dataset.button;
+    var tab = '#tab-' + currentValue.dataset.tab;
 
     currentValue.addEventListener('click', function (event) {
       this.handleClick(tab, event);
@@ -843,6 +831,80 @@ bit.tabs.prototype.activateTabPanel = function () {
 bit.tabs.cssClass = {
   'ACTIVE': 'is-active',
   'DISABLED': 'is-disabled'
+};
+
+/**
+ * Represents a tooltip component
+ * @constructor
+ * @param {object} elem  The element to which the tooltip is attached.
+ * @param {object} config Optional configuration object
+ */
+bit.tooltip = function (elem, config) {
+
+  "use strict";
+
+  this.elem = elem;
+
+  this.config = {
+  };
+
+  bit.obj.extend(this.config, config);
+
+  this.trigger = this.elem;
+
+  this.tooltip = null;
+
+  this.init();
+
+};
+
+
+bit.tooltip.prototype.init = function() {
+
+  this.elem.addEventListener('mouseover', function (event) {
+    this.handleMouseOver(event);
+  }.bind(this));
+
+  this.elem.addEventListener('mouseout', function (event) {
+    this.handleMouseOut(event);
+  }.bind(this));
+
+};
+
+
+bit.tooltip.prototype.handleMouseOver = function(event) {
+  var currentTip = event.currentTarget;
+  this.activateTooltip(currentTip);
+};
+
+
+bit.tooltip.prototype.activateTooltip = function () {
+
+  if (!this.tooltip) {
+    var text = this.config.text;
+
+    this.tooltip = document.createElement('div');
+    this.tooltip.textContent = text;
+
+    this.trigger.appendChild(this.tooltip);
+  }
+
+  this.tooltip.classList.add('active');
+
+};
+
+
+bit.tooltip.prototype.handleMouseOut = function(event) {
+  this.tooltip.classList.remove('active');
+};
+
+
+/**
+ * CSS Class collection
+ * @type {Object}
+ */
+bit.tooltip.cssClass = {
+  'ACTIVE': 'active'
 };
 
 // Initialize the core

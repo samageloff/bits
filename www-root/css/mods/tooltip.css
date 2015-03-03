@@ -1,0 +1,26 @@
+[data-mod="tooltip"] {
+  color: #3f51b5;
+  display: inline-block;
+  font-weight: bold;
+  position: relative;
+}
+
+[data-mod="tooltip"] div {
+  background: #555;
+  color: #FFF;
+  font-weight: initial;
+  font-size: 14px;
+  opacity: 0;
+  padding: .5em;
+  position: absolute;
+  top: auto;
+  white-space: nowrap;
+  -webkit-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  -moz-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  z-index: 1;
+}
+
+[data-mod="tooltip"] div.active {
+  opacity: 1;
+}

@@ -21,7 +21,6 @@ bit.accordion = function (elem, config) {
 
 
 bit.accordion.prototype.init = function () {
-
   this.panel.forEach(function (currentValue) {
     var header = currentValue.children[0];
 
@@ -30,12 +29,10 @@ bit.accordion.prototype.init = function () {
     }.bind(this));
 
   }.bind(this));
-
 };
 
 
 bit.accordion.prototype.handleClick = function (header, event) {
-
   var currentPanel = event.target.parentElement;
 
   if (this.config.toggle) {
@@ -46,24 +43,16 @@ bit.accordion.prototype.handleClick = function (header, event) {
     }
     this.tearDown(this.panel);
     currentPanel.classList.add(bit.accordion.cssClass.ACTIVE);
-    header.classList.add(bit.accordion.cssClass.DISABLED);
   }
-
 };
 
 
 bit.accordion.prototype.tearDown = function (panel) {
-
   panel.forEach(function (currentValue) {
-    var header = currentValue.children[0];
-
     if (currentValue.classList.contains(bit.accordion.cssClass.ACTIVE)) {
       currentValue.classList.remove(bit.accordion.cssClass.ACTIVE);
     }
-
-    header.classList.remove(bit.accordion.cssClass.DISABLED);
   });
-
 };
 
 
@@ -72,6 +61,5 @@ bit.accordion.prototype.tearDown = function (panel) {
  * @type {Object}
  */
 bit.accordion.cssClass = {
-  'ACTIVE': 'is-active',
-  'DISABLED': 'is-disabled'
+  'ACTIVE': 'is-active'
 };

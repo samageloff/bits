@@ -304,7 +304,7 @@ bit.slideshow.prototype.handleDisabledState = function () {
  * @type {Object}
  */
 bit.slideshow.cssClass = {
-  'BUTTON': 'button button-circle button-jumbo button-royal',
+  'BUTTON': 'button button-circle button-jumbo',
   'CURRENT': 'is-current',
   'DISABLED': 'is-disabled'
 };

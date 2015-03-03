@@ -31,7 +31,7 @@ bit.tabs = function (elem, config) {
 bit.tabs.prototype.init = function() {
 
   this.tab.forEach(function (currentValue) {
-    var tab = '#tab-' + currentValue.dataset.button;
+    var tab = '#tab-' + currentValue.dataset.tab;
 
     currentValue.addEventListener('click', function (event) {
       this.handleClick(tab, event);

@@ -37,9 +37,7 @@ The core.js scans the document, and locates all modules with the data-mod attrib
 1. Slideshow
 1. Accordion
 1. Tabs
+1. Tooltips
 
 ## In the pipe:
-1. Support for vendor-prefixes
-1. Tabbed component
-1. Modal windows
-1. Tooltips
+1. Animation support for vendor-prefixes

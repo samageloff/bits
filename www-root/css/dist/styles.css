@@ -715,12 +715,22 @@ body {
   }
 }
 
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,500,300);
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
 section {
   margin-bottom: 3em;
 }
 
 hr {
   margin: 2em 0;
+}
+
+button.button {
+  color: #3f51b5;
 }
 /*! @license
 *
@@ -821,17 +831,11 @@ hr {
 * The default values for the .button class
 */
 .button {
-  color: #666666;
-  background-color: #eeeeee;
-  border-color: #eeeeee;
-  font-weight: 300;
-  font-size: 16px;
-  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   text-decoration: none;
   text-align: center;
   line-height: 40px;
   height: 40px;
-  padding: 0 40px;
+  padding: 0 1em;
   margin: 0;
   display: inline-block;
   appearance: none;
@@ -2276,26 +2280,23 @@ hr {
 }
 
 .accordion .panel {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   list-style-type: none;
 }
 
-.accordion .panel p {
-  margin: .5em 1em;
-}
-
 .accordion .panel .content {
-  -webkit-transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  -moz-transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  height: 0;
-  overflow: auto;
+  display: none;
 }
 
 .accordion .panel.is-active .content {
-  -webkit-transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  -moz-transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  transition: height .5s cubic-bezier(.55, 0, .1, 1);
-  height: 150px;
+  display: block;
+  margin: 0 0 1em 0;
+}
+
+.accordion .panel .header {
+  cursor: pointer;
+  margin: 0;
+  padding: 1em 0;
 }
 /* Slideshow Styles */
 .slideshow {
@@ -2390,4 +2391,30 @@ hr {
   pointer-events: none;
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+[data-mod="tooltip"] {
+  color: #3f51b5;
+  display: inline-block;
+  font-weight: bold;
+  position: relative;
+}
+
+[data-mod="tooltip"] div {
+  background: #555;
+  color: #FFF;
+  font-weight: initial;
+  font-size: 14px;
+  opacity: 0;
+  padding: .5em;
+  position: absolute;
+  top: auto;
+  white-space: nowrap;
+  -webkit-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  -moz-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
+  z-index: 1;
+}
+
+[data-mod="tooltip"] div.active {
+  opacity: 1;
 }
