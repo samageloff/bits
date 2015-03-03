@@ -14,6 +14,7 @@
     "time-grunt": "~0.2.3",
     "grunt-notify": "~0.4.1",
     "grunt-concurrent": "~0.4.2",
-    "grunt-jsdoc": "~0.5.8"
+    "grunt-jsdoc": "~0.5.8",
+    "grunt-evil-icons": "~0.3.2"
   }
 }

@@ -36,6 +36,7 @@ module.exports = function(grunt) {
           'www-root/css/core/grid.css',
           'www-root/css/core/global.css',
           'www-root/css/core/buttons.css',
+          'www-root/css/core/icons.css',
           'www-root/css/mods/**/*.css'
         ],
         dest: 'www-root/css/dist/styles.css',
@@ -73,6 +74,14 @@ module.exports = function(grunt) {
           destination: 'doc'
         }
       }
+    },
+
+    evil_icons: {
+      dist: {
+        files: {
+          "build/index.html": "www-root/index.html"
+        }
+      }
     }
 
   });
@@ -85,6 +94,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-evil-icons');
 
   // Default task(s).
   grunt.registerTask('default', ['concurrent:target']);
