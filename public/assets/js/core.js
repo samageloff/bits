@@ -6,7 +6,7 @@ bit.modConf = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
-  PREFIX_: 'data-'
+  PREFIX_: 'data'
 };
 
 

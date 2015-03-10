@@ -15,8 +15,6 @@ bit.tooltip = function (elem, config) {
 
   bit.obj.extend(this.config, config);
 
-  this.trigger = this.elem;
-
   this.tooltip = null;
 
   this.init();
@@ -47,28 +45,26 @@ bit.tooltip.prototype.init = function() {
  * @return {[type]}       [description]
  */
 bit.tooltip.prototype.handleMouseOver = function(event) {
-  var currentTip = event.currentTarget;
-  this.activateTooltip(currentTip);
+  var current = event.currentTarget;
+  this.activate(current);
 };
 
 
 /**
- * [activateTooltip description]
+ * [activate description]
  * @return {[type]} [description]
  */
-bit.tooltip.prototype.activateTooltip = function () {
-
+bit.tooltip.prototype.activate = function () {
   if (!this.tooltip) {
     var text = this.config.text;
 
     this.tooltip = document.createElement('div');
     this.tooltip.textContent = text;
 
-    this.trigger.appendChild(this.tooltip);
+    this.elem.appendChild(this.tooltip);
   }
 
   this.tooltip.classList.add('active');
-
 };
 
 

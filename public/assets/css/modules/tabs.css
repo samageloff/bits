@@ -1,0 +1,25 @@
+.tabs-content {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.tabs-content .panel {
+  display: none;
+}
+
+.tabs-content .panel.is-active {
+  display: block;
+}
+
+.tabs-nav .is-active {
+  background: #EEE;
+  border: 0;
+  color: #CCC;
+  cursor: default;
+  appearance: none;
+  pointer-events: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}

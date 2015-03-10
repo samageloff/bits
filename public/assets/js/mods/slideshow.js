@@ -32,7 +32,7 @@ bit.slideshow = function (elem, config) {
   this.vendorPrefix = bit.util.vendorPrefix();
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panels = Array.prototype.slice.call(this.panelGroup);
+  this.panels = bit.util.toArray(this.panelGroup);
 
   this.wrapper = this.elem.querySelector(this.config.wrapper);
   this.wrapperInner = this.elem.querySelector(this.config.wrapperInner);
@@ -138,13 +138,14 @@ bit.slideshow.prototype.calculateDimensions = function () {
  * Create previous and next buttons
  */
 bit.slideshow.prototype.createPrevNext = function() {
-  function createButton(id, text, klass) {
+
+  var createButton = function createButton(id, text, type) {
     var button = document.createElement('button');
     button.setAttribute('id', id);
-    button.setAttribute('class', klass);
+    button.setAttribute('class', type);
     button.textContent = text;
     return button;
-  }
+  };
 
   this.prevBtn = createButton('previous', '‹', bit.slideshow.cssClass.BUTTON);
   this.nextBtn = createButton('next', '›', bit.slideshow.cssClass.BUTTON);

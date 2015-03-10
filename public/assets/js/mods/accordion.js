@@ -13,7 +13,7 @@ bit.accordion = function (elem, config) {
   bit.obj.extend(this.config, config);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panel = Array.prototype.slice.call(this.panelGroup);
+  this.panel = bit.util.toArray(this.panelGroup);
 
   this.init();
 

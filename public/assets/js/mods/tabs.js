@@ -18,10 +18,10 @@ bit.tabs = function (elem, config) {
   bit.obj.extend(this.config, config);
 
   this.tabGroup = this.elem.querySelectorAll(this.config.tab);
-  this.tab = Array.prototype.slice.call(this.tabGroup);
+  this.tab = bit.util.toArray(this.tabGroup);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panel = Array.prototype.slice.call(this.panelGroup);
+  this.panel = bit.util.toArray(this.panelGroup);
 
   this.init();
 

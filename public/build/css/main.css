@@ -740,7 +740,7 @@ button.button {
   content: " ";
   clear: both;
   height: 0;
-  }
+}
 /*! @license
 *
 * Buttons
@@ -1977,9 +1977,9 @@ button.button {
 }
 
 .slideshow-wrapper .panel-wrap {
-	-webkit-transition: transform .5s cubic-bezier(.55, 0, .1, 1);
-	-moz-transition: transform .5s cubic-bezier(.55, 0, .1, 1);
-	transition: transform .5s cubic-bezier(.55, 0, .1, 1);
+	-webkit-transition: transform .5s cubic-bezier(.75, 0, .1, 1);
+	-moz-transition: transform .5s cubic-bezier(.75, 0, .1, 1);
+	transition: transform .5s cubic-bezier(.75, 0, .1, 1);
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -2027,23 +2027,19 @@ button.button {
 }
 
 .tabs-content .panel {
-  opacity: 0;
-  -webkit-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
-  -moz-transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
-  transition: opacity .5s cubic-bezier(.55, 0, .1, 1);
-  position: absolute;
+  display: none;
 }
 
 .tabs-content .panel.is-active {
-  opacity: 1;
+  display: block;
 }
 
 .tabs-nav .is-active {
-  background: #EEE !important;
+  background: #EEE;
   border: 0;
-  color: #CCC !important;
-  cursor: default !important;
-  appearance: none !important;
+  color: #CCC;
+  cursor: default;
+  appearance: none;
   pointer-events: none;
   -webkit-box-shadow: none;
           box-shadow: none;

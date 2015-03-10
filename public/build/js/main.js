@@ -1,6 +1,30 @@
+/*
+
+______________   ________________  _______________   _____________
+_____    ______  ________________  _______________  _______________
+_____     _____        ____             _____       _______
+_____    ______        ____             _____       ______
+______________         ____             _____        _____________
+_____    ______        ____             _____              ________
+_____     _____        ____             _____               _______
+_____    ______  ________________       _____       _______________
+______________   ________________       _____        _____________
+
+*/
+
 var bit = {};
 
 bit.util = function() {};
+
+
+/**
+ * [toArray description]
+ * @return {[type]} [description]
+ */
+bit.util.toArray = function(list) {
+  return Array.prototype.slice.call(list);
+};
+
 
 /**
  * [transitionEndEventName to detect browser]
@@ -215,7 +239,7 @@ bit.modConf = {
   ATTRIBUTE: 'data-mod',
   DATA: 'mod',
   CONFIG_PREFIX: 'conf',
-  PREFIX_: 'data-'
+  PREFIX_: 'data'
 };
 
 
@@ -392,7 +416,7 @@ bit.accordion = function (elem, config) {
   bit.obj.extend(this.config, config);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panel = Array.prototype.slice.call(this.panelGroup);
+  this.panel = bit.util.toArray(this.panelGroup);
 
   this.init();
 
@@ -477,7 +501,7 @@ bit.slideshow = function (elem, config) {
   this.vendorPrefix = bit.util.vendorPrefix();
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panels = Array.prototype.slice.call(this.panelGroup);
+  this.panels = bit.util.toArray(this.panelGroup);
 
   this.wrapper = this.elem.querySelector(this.config.wrapper);
   this.wrapperInner = this.elem.querySelector(this.config.wrapperInner);
@@ -583,13 +607,14 @@ bit.slideshow.prototype.calculateDimensions = function () {
  * Create previous and next buttons
  */
 bit.slideshow.prototype.createPrevNext = function() {
-  function createButton(id, text, klass) {
+
+  var createButton = function createButton(id, text, type) {
     var button = document.createElement('button');
     button.setAttribute('id', id);
-    button.setAttribute('class', klass);
+    button.setAttribute('class', type);
     button.textContent = text;
     return button;
-  }
+  };
 
   this.prevBtn = createButton('previous', '‹', bit.slideshow.cssClass.BUTTON);
   this.nextBtn = createButton('next', '›', bit.slideshow.cssClass.BUTTON);
@@ -774,10 +799,10 @@ bit.tabs = function (elem, config) {
   bit.obj.extend(this.config, config);
 
   this.tabGroup = this.elem.querySelectorAll(this.config.tab);
-  this.tab = Array.prototype.slice.call(this.tabGroup);
+  this.tab = bit.util.toArray(this.tabGroup);
 
   this.panelGroup = this.elem.querySelectorAll(this.config.panel);
-  this.panel = Array.prototype.slice.call(this.panelGroup);
+  this.panel = bit.util.toArray(this.panelGroup);
 
   this.init();
 
@@ -850,8 +875,6 @@ bit.tooltip = function (elem, config) {
 
   bit.obj.extend(this.config, config);
 
-  this.trigger = this.elem;
-
   this.tooltip = null;
 
   this.init();
@@ -882,28 +905,26 @@ bit.tooltip.prototype.init = function() {
  * @return {[type]}       [description]
  */
 bit.tooltip.prototype.handleMouseOver = function(event) {
-  var currentTip = event.currentTarget;
-  this.activateTooltip(currentTip);
+  var current = event.currentTarget;
+  this.activate(current);
 };
 
 
 /**
- * [activateTooltip description]
+ * [activate description]
  * @return {[type]} [description]
  */
-bit.tooltip.prototype.activateTooltip = function () {
-
+bit.tooltip.prototype.activate = function () {
   if (!this.tooltip) {
     var text = this.config.text;
 
     this.tooltip = document.createElement('div');
     this.tooltip.textContent = text;
 
-    this.trigger.appendChild(this.tooltip);
+    this.elem.appendChild(this.tooltip);
   }
 
   this.tooltip.classList.add('active');
-
 };
 
 
